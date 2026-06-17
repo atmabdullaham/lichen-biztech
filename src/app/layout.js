@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { Geist, Geist_Mono, Lora } from "next/font/google";
@@ -45,7 +46,7 @@ export default function RootLayout({ children }) {
         <main className="min-h-[calc(100vh-280px)]">
         {children}
         </main>
-        {/* Footer */}
+        <Footer/>
         </ThemeProvider>
         </body>
     </html>
