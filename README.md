@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Here is the complete, A-to-Z Git workflow guideline tailored exactly to your team's environment. You can copy and paste this entire block directly into your `README.md` or a `CONTRIBUTING.md` file.
 
-## Getting Started
+---
 
-First, run the development server:
+````markdown
+# 🌿 Lichen Development Guide & Git Workflow
+
+Welcome to the Lichen Next.js project repository! To ensure our team (Abdullah, Rakib, and future developers) can build fast, avoid merge conflicts, and keep the live website stable, we strictly follow the Git workflow outlined below.
+
+Please read this document completely before writing any code.
+
+---
+
+## 🏗️ 1. Our Branching Architecture
+
+We use a protected, dual-branch system. **No developer is allowed to commit or merge directly into `main` or `development` via the terminal.** \* **`main` (Production 🟢):** The locked, stable branch. This represents what is currently live on `lichenbts.com`. Code only gets here via an official Release Pull Request.
+
+- **`development` (Integration 🟡):** The shared team workspace. All daily work, new components (shadcn/ui), and bug fixes are merged here first for testing.
+- **Feature Branches (Active Work 🔵):** Temporary branches where you write your actual code. You will create a new one for every specific task and delete it when you are done.
+
+### Branch Naming Convention
+
+Do not use a permanent personal branch (like `rakib-dev`). Instead, name your branch based on who you are and what you are doing:
+
+- `[name]-[feature/fix]-[description]`
+- _Examples:_ `rakib-feature-hero-section`, `abdullah-fix-navbar-mobile`, `rakib-add-shadcn-button`
+
+---
+
+## 🚀 2. The Daily Developer Workflow (A to Z)
+
+Follow these exact steps every time you sit down to work on a new task.
+
+### Step A: Sync with the Team Workspace
+
+Before you write a single line of code, ensure your local machine has the latest updates from your teammates. **Always pull from `development`, never from `main`.**
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git checkout development
+git pull origin development
+```
+````
+
+### Step B: Create Your Task Branch
+
+Create your temporary feature branch off of the updated `development` branch.
+
+```bash
+git checkout -b yourname-feature-description
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Step C: Write Code & Commit Often
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Build your Next.js components, add your shadcn/ui features, and make small, logical commits. Write clear commit messages so your team knows what you did.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git add .
+git commit -m "Added responsive shadcn Navbar and mobile Sheet component"
 
-## Learn More
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Step D: The "Conflict Prevention" Sync (Crucial)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+While you were working, Abdullah or Rakib might have finished a task and merged it into `development`. You need to pull their changes into your branch _before_ you push your code online.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# 1. Go back to development and get the latest code
+git checkout development
+git pull origin development
 
-## Deploy on Vercel
+# 2. Go back to your feature branch
+git checkout yourname-feature-description
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 3. Bring the new team updates into your workspace
+git merge development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+
+_(Note: If you get a merge conflict here, VS Code will highlight it. Fix the conflict in your own branch, save the files, `git add .`, and `git commit`)._
+
+### Step E: Push & Create a Pull Request (PR)
+
+Once your code is working and synced, push your branch to the cloud.
+
+```bash
+git push origin yourname-feature-description
+
+```
+
+- **Stop using the terminal here.** \* Go to GitHub/GitLab.
+- Click **New Pull Request**.
+- Set the base to `development` and the compare branch to your feature branch.
+- Tag your teammate to review your code. Once approved, click "Merge"!
+
+---
+
+## 🚢 3. Releasing to Production (The `main` branch)
+
+When the `development` branch has enough tested features and is ready to go live on the actual Lichen website, the Lead Developer will handle the release.
+
+1. **Create a Release PR:** On GitHub/GitLab, create a Pull Request from `development` into `main`.
+2. **Review & Merge:** Review the final code and click Merge. (This will typically trigger Vercel to deploy the live site).
+3. **Sync Local Machines:** After the website is updated, every developer must run these commands to update their local computers:
+
+```bash
+git checkout main
+git pull origin main
+git checkout development
+git merge main
+
+```
+
+---
+
+## 🛡️ 4. The Golden Rules
+
+1. **Talk First, Code Second:** If Abdullah is working on `app/page.js`, Rakib should work on something else (like `app/about/page.js`). Never work on the exact same file at the exact same time.
+2. **Ignore `main` during the week:** For your day-to-day coding, pretend `main` doesn't exist. Live entirely in `development` and your feature branches.
+3. **Delete Old Branches:** After your PR is merged, delete your feature branch on GitHub/GitLab, and delete it locally (`git branch -d yourname-feature-description`) to keep your terminal clean.
+
+```
+
+```
