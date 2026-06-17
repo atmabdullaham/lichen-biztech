@@ -10,7 +10,19 @@ const Header = () => {
           <Image src="/logo.png" width={100} height={40} alt="Lichen"></Image>
         </Link>
       </div>
-      <div>Links</div>
+      <div>
+        <ul className="flex space-x-4">
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/about">About</Link>
+          </li>
+          <li>
+            <Link href="/contact">Contact</Link>
+          </li>
+        </ul>
+      </div>
       <div>
         <ModeToggle />
       </div>
