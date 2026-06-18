@@ -115,6 +115,7 @@ const Header = () => {
               height={40}
               alt="Lichen BTS"
               priority
+              style={{ height: "auto" }}
               className={`transition-all duration-300 ${!scrolled ? "brightness-0 invert" : ""}`}
             />
           </Link>
@@ -258,6 +259,7 @@ const Header = () => {
                     width={80}
                     height={32}
                     alt="Lichen BTS"
+                    style={{ height: "auto" }}
                   />
                   <button
                     type="button"
