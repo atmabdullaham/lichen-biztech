@@ -155,18 +155,31 @@ const Footer = () => {
               <li className="flex items-start gap-3 text-sm text-white/40">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#85C441]/60" />
                 <span>
-                  Kapasegola Road, Chokbazar,
+                  #07 System Imperial Complex (2nd floor)
                   <br />
-                  Chittagong, Bangladesh
+                  Kapasegola Road, Chawkbazar,
+                  <br />
+                  Chattogram, Bangladesh
                 </span>
               </li>
               <li>
                 <a
-                  href="tel:+8801XXXXXXXXX"
+                  href="tel:+8801879514881"
                   className="flex items-center gap-3 text-sm text-white/40 transition-colors hover:text-[#85C441]"
                 >
                   <Phone className="h-4 w-4 shrink-0 text-[#85C441]/60" />
-                  +880 1XXX-XXXXXX
+                  +8801879514881
+
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+8801521223351"
+                  className="flex items-center gap-3 text-sm text-white/40 transition-colors hover:text-[#85C441]"
+                >
+                  <Phone className="h-4 w-4 shrink-0 text-[#85C441]/60" />
+                  +8801521223351
+
                 </a>
               </li>
               <li>
@@ -175,7 +188,7 @@ const Footer = () => {
                   className="flex items-center gap-3 text-sm text-white/40 transition-colors hover:text-[#85C441]"
                 >
                   <Mail className="h-4 w-4 shrink-0 text-[#85C441]/60" />
-                  info@lichenbts.com
+                  lichenbts@gmail.com
                 </a>
               </li>
             </ul>
@@ -188,7 +201,7 @@ const Footer = () => {
             <p className="text-xs text-white/30">
               &copy; {new Date().getFullYear()} Lichen BTS. All rights reserved.
             </p>
-            <p className="text-xs text-white/30">
+            {/* <p className="text-xs text-white/30">
               Developed by{" "}
               <a
                 href="https://abdelrahman-lichi.vercel.app"
@@ -196,9 +209,9 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="text-[#85C441]/50 transition-colors hover:text-[#85C441]"
               >
-                Abdelrahman Lichi
+                
               </a>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
