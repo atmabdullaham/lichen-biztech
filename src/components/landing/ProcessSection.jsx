@@ -8,7 +8,7 @@ const steps = [
     icon: ClipboardList,
     step: "01",
     title: "Place Your Order",
-    titleBn: "অর্ডার দিন",
+
     description:
       "Tell us what you need. Share your requirements, vision, and goals — we're all ears. Whether it's a quick chat, a form, or a detailed brief.",
   },
@@ -16,7 +16,7 @@ const steps = [
     icon: CheckCircle2,
     step: "02",
     title: "We Review & Plan",
-    titleBn: "আমরা রিভিউ ও প্ল্যান করি",
+
     description:
       "Our experts analyze your requirements, create a tailored strategy, and present a clear roadmap with timelines and milestones.",
   },
@@ -24,7 +24,7 @@ const steps = [
     icon: Truck,
     step: "03",
     title: "Timely Delivery",
-    titleBn: "সময়মতো ডেলিভারি",
+
     description:
       "We execute with precision and deliver on time, every time. You get regular updates throughout the process and full support after delivery.",
   },
@@ -75,7 +75,7 @@ export default function ProcessSection() {
             How We Work
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-white/50">
-            A simple, transparent 3-step process that ensures quality results
+            3-step process that ensures quality results
             every time.
           </p>
         </motion.div>
@@ -121,12 +121,7 @@ export default function ProcessSection() {
               <h3 className="mb-1 text-xl font-semibold text-white">
                 {step.title}
               </h3>
-              <p
-                className="mb-3 text-sm text-[#85C441]/60"
-                style={{ fontFamily: "var(--font-bengali)" }}
-              >
-                {step.titleBn}
-              </p>
+
               <p className="mx-auto max-w-xs text-sm leading-relaxed text-white/50">
                 {step.description}
               </p>

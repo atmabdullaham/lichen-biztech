@@ -67,7 +67,7 @@ export default function HeroSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 text-sm text-white/70 backdrop-blur-sm"
         >
-          <Sparkles className="h-4 w-4 text-[#85C441]" />
+
           <span>360° Business Tech Solution</span>
         </motion.div>
 
