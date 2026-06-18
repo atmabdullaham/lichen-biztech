@@ -82,6 +82,7 @@ const Footer = () => {
                 width={110}
                 height={44}
                 alt="Lichen BTS"
+                style={{ height: "auto" }}
                 className="brightness-0 invert"
               />
             </Link>
