@@ -1,12 +1,15 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { Geist, Geist_Mono, Hind_Siliguri } from "next/font/google";
+import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
+import ThemeToggleFloating from "@/components/ThemeToggleFloating";
+import { Plus_Jakarta_Sans, Geist_Mono, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 const geistMono = Geist_Mono({
@@ -48,7 +51,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${hindSiliguri.variable} h-full antialiased`}
+      className={`${plusJakartaSans.variable} ${geistMono.variable} ${hindSiliguri.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider
@@ -57,9 +60,12 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <SmoothScrollProvider>
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+            <ThemeToggleFloating />
+          </SmoothScrollProvider>
         </ThemeProvider>
       </body>
     </html>
