@@ -53,8 +53,8 @@
   --color-brand-mid: #3A6E2A;
   --color-brand-text: #4A7A30;
   --color-brand-gray: #7A8B95;
-  --color-brand-surface: #F2F9EE;
-  --color-brand-surface-dark: #0E2A14;
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-dark: var(--brand-surface-dark);
 }
 
 :root {
@@ -107,6 +107,9 @@
   --gradient-brand: linear-gradient(135deg, #1E5028 0%, #4A8E2A 50%, #85C441 100%);
   --gradient-hero: linear-gradient(135deg, #0A1F10 0%, #1E5028 60%, #3A6E2A 100%);
   --gradient-accent: linear-gradient(135deg, #85C441 0%, #3A6E2A 100%);
+  --surface-color: #F2F9EE;
+  --brand-surface: #F2F9EE;
+  --brand-surface-dark: #0E2A14;
 }
 
 .dark {
@@ -156,6 +159,15 @@
   --gradient-brand: linear-gradient(135deg, #85C441 0%, #4A8E2A 50%, #1E5028 100%);
   --gradient-hero: linear-gradient(135deg, #0A1F10 0%, #0E2A14 40%, #1E5028 100%);
   --gradient-accent: linear-gradient(135deg, #3A6E2A 0%, #85C441 100%);
+  --surface-color: #0E2A14 !important;
+  --brand-surface: #0E2A14 !important;
+  --brand-surface-dark: #F2F9EE !important;
+}
+
+html.dark {
+  --surface-color: #0E2A14 !important;
+  --brand-surface: #0E2A14 !important;
+  --brand-surface-dark: #F2F9EE !important;
 }
 
 @layer base {
@@ -163,7 +175,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    scroll-behavior: smooth;
   }
 }
 
@@ -214,3 +225,54 @@
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Twinkling Star Animations */
+@keyframes twinkle-1 {
+  0%, 100% { opacity: 0.15; transform: scale(0.6); }
+  50% { opacity: 0.85; transform: scale(1.1); }
+}
+@keyframes twinkle-2 {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+@keyframes twinkle-3 {
+  0%, 100% { opacity: 0.2; transform: scale(0.7); }
+  50% { opacity: 0.75; transform: scale(1.2); }
+}
+
+.animate-twinkle-1 { animation: twinkle-1 4s ease-in-out infinite; }
+.animate-twinkle-2 { animation: twinkle-2 6s ease-in-out infinite; }
+.animate-twinkle-3 { animation: twinkle-3 8s ease-in-out infinite; }
+
+.space-gradient {
+  background: radial-gradient(circle at 80% 20%, rgba(133, 196, 65, 0.18) 0%, transparent 60%),
+              radial-gradient(circle at 20% 80%, rgba(30, 80, 40, 0.35) 0%, transparent 65%),
+              linear-gradient(135deg, #040D07 0%, #0E2A14 60%, #081B0F 100%);
+}
+
+.bezel-glow {
+  box-shadow: 0 0 50px -10px rgba(133, 196, 65, 0.08),
+              inset 0 0 30px rgba(255, 255, 255, 0.02);
+}
+
+/* Lenis smooth scrolling compatibility styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
