@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-const LOGO_URL = "https://ik.imagekit.io/atm/focus-coaching.png";
+const LOGO_URL = "/focus-coaching-green.png";
 
 // Repeat 5 logos, then duplicate the set for seamless infinite loop
 const logos = Array.from({ length: 5 }, (_, i) => ({
@@ -16,7 +16,7 @@ export default function TrustedBySection() {
     <section
       id="trusted-by"
       className="relative overflow-hidden py-14 sm:py-16"
-      style={{ backgroundColor: "#F2F9EE" }}
+      style={{ backgroundColor: "var(--color-brand-surface)" }}
     >
       {/* Subtle top/bottom dividers */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#85C441]/30 to-transparent" />
@@ -27,10 +27,10 @@ export default function TrustedBySection() {
         <span className="mb-3 inline-block rounded-full border border-[#85C441]/25 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#4A7A30]">
           Our Clients
         </span>
-        <h2 className="text-2xl font-bold tracking-tight text-[#1E5028] sm:text-3xl">
+        <h2 className="text-2xl font-bold tracking-tight text-[#1E5028] dark:text-white sm:text-3xl">
           Trusted by Thousands of Users
         </h2>
-        <p className="mt-2 text-sm text-[#7A8B95]">
+        <p className="mt-2 text-sm text-[#7A8B95] dark:text-white/60">
           Brands that grow with Lichen
         </p>
       </div>
@@ -38,9 +38,9 @@ export default function TrustedBySection() {
       {/* Marquee wrapper — fade edges */}
       <div className="relative">
         {/* Left fade */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[#F2F9EE] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-[var(--color-brand-surface)] to-transparent" />
         {/* Right fade */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[#F2F9EE] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-[var(--color-brand-surface)] to-transparent" />
 
         {/*
           Tailwind v4 marquee pattern:
@@ -69,13 +69,13 @@ export default function TrustedBySection() {
 
 function LogoCard({ logo }) {
   return (
-    <div className="flex shrink-0 items-center justify-center rounded-2xl border border-[#85C441]/10 bg-white/70 px-8 py-5 shadow-sm backdrop-blur-sm">
+    <div className="flex shrink-0 items-center justify-center rounded-2xl border border-[#85C441]/10 dark:border-white/5 bg-white/70 dark:bg-white/5 px-8 py-5 shadow-sm backdrop-blur-sm">
       <Image
         src={logo.src}
         alt={logo.alt}
         width={160}
         height={48}
-        className="h-10 w-auto object-contain opacity-80"
+        className="h-10 w-auto object-contain opacity-80 dark:opacity-70 dark:brightness-0 dark:invert transition-all duration-300"
       />
     </div>
   );

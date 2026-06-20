@@ -1,88 +1,172 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { Leaf, Target, Users } from "lucide-react";
+import { Leaf, Target, Users, Briefcase, Award, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
-function AnimatedCounter({ target, suffix = "", duration = 2000 }) {
-  const [count, setCount] = useState(0);
+const storyCards = [
+  {
+    icon: Users,
+    title: "150+ Clients Served",
+    subtitle: "Global Trust",
+    description: "Partnering with businesses globally to build custom digital solutions that scale.",
+    statBadge: "150+ Clients Served",
+  },
+  {
+    icon: Leaf,
+    title: "Symbiotic Growth",
+    subtitle: "Our Philosophy",
+    description: "Growing alongside your business like a symbiotic natural lichen organism.",
+    statBadge: "Symbiotic Partnership",
+  },
+  {
+    icon: Briefcase,
+    title: "500+ Projects Completed",
+    subtitle: "Proven Delivery",
+    description: "Successful software, design, and marketing projects completed on-time.",
+    statBadge: "500+ Projects",
+  },
+  {
+    icon: Target,
+    title: "Tailored Focus",
+    subtitle: "Bespoke Strategy",
+    description: "Rejecting cookie-cutter templates for solutions tailored to your goals.",
+    statBadge: "Focused Solutions",
+  },
+  {
+    icon: Award,
+    title: "5+ Years Experience",
+    subtitle: "Proven Track Record",
+    description: "Half a decade of industry expertise delivering business success.",
+    statBadge: "5+ Years Track Record",
+  },
+  {
+    icon: Sparkles,
+    title: "Your Extended Team",
+    subtitle: "Continuous Support",
+    description: "Continuous collaboration and expertise whenever your business needs it.",
+    statBadge: "Extended Team Support",
+  }
+];
+
+function Counter({ value, duration = 2 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   useEffect(() => {
     if (!isInView) return;
 
-    let startTime;
-    const animate = (currentTime) => {
-      if (!startTime) startTime = currentTime;
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+    const numericMatch = String(value).match(/^(\d+)(.*)$/);
+    const target = numericMatch ? parseInt(numericMatch[1], 10) : 0;
+    const suffix = numericMatch ? numericMatch[2] : "";
 
-      // Ease out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(eased * target));
+    let start = 0;
+    const end = target;
+    if (start === end) {
+      if (ref.current) ref.current.textContent = value;
+      return;
+    }
+
+    const totalMiliseconds = duration * 1000;
+    const startTime = performance.now();
+
+    let frameId;
+    const update = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / totalMiliseconds, 1);
+
+      const easeProgress = progress * (2 - progress);
+      const current = Math.floor(easeProgress * (end - start) + start);
+
+      if (ref.current) {
+        ref.current.textContent = `${current}${suffix}`;
+      }
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        frameId = requestAnimationFrame(update);
       }
     };
 
-    requestAnimationFrame(animate);
-  }, [isInView, target, duration]);
+    frameId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frameId);
+  }, [isInView, value, duration]);
 
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
+  const numericMatch = String(value).match(/^(\d+)(.*)$/);
+  const suffix = numericMatch ? numericMatch[2] : "";
+  return <span ref={ref}>0{suffix}</span>;
 }
 
-const stats = [
-  { label: "Clients Served", value: 150, suffix: "+" },
-  { label: "Projects Completed", value: 500, suffix: "+" },
-  { label: "Years Experience", value: 5, suffix: "+" },
-  { label: "Team Members", value: 25, suffix: "+" },
-];
-
-const storyPoints = [
-  {
-    icon: Leaf,
-    title: "Symbiotic Growth",
-    description:
-      "Just like the lichen organism — a partnership between fungi and algae — we grow alongside your business, creating something greater than the sum of its parts.",
-  },
-  {
-    icon: Target,
-    title: "Focused Solutions",
-    description:
-      "Every strategy is tailored to your unique business needs. No cookie-cutter approaches, just data-driven solutions that deliver results.",
-  },
-  {
-    icon: Users,
-    title: "Your Extended Team",
-    description:
-      "We don't just deliver projects — we become part of your journey, providing ongoing support and expertise whenever you need it.",
-  },
-];
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
-  },
-};
-
 export default function AboutSection() {
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [timeProgress, setTimeProgress] = useState(0.5); // Start so the middle card is active
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const hoveredIndexRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    hoveredIndexRef.current = hoveredIndex;
+  }, [hoveredIndex]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Smooth continuous scroll loop
+  useEffect(() => {
+    let frameId;
+    let lastTime = performance.now();
+    const update = (now) => {
+      const delta = now - lastTime;
+      lastTime = now;
+
+      setTimeProgress((prev) => {
+        const N = storyCards.length;
+        const S = isMobile ? 0.42 : 0.25;
+        const totalSpan = N * S;
+        let closestIndex = 0;
+        let minDist = totalSpan;
+        for (let i = 0; i < N; i++) {
+          const t = (i * S - prev * totalSpan + totalSpan * 10) % totalSpan;
+          const diff = Math.abs(t - 0.5);
+          const dist = diff > totalSpan / 2 ? totalSpan - diff : diff;
+          if (dist < minDist) {
+            minDist = dist;
+            closestIndex = i;
+          }
+        }
+
+        // If the hovered index is the closest one to the middle, don't increment (pause scroll)
+        if (hoveredIndexRef.current === closestIndex) {
+          return prev;
+        }
+
+        // Scroll speed: completes full loop in 25 seconds
+        return (prev + delta / 25000) % 1;
+      });
+
+      frameId = requestAnimationFrame(update);
+    };
+    frameId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frameId);
+  }, [isMobile]);
+
+  if (!mounted) return null;
+
+  const currentTheme = theme === "system" ? resolvedTheme : theme;
+  const isDark = currentTheme === "dark";
+
   return (
     <section
       id="about"
@@ -91,8 +175,12 @@ export default function AboutSection() {
     >
       {/* Decorative bg element */}
       <div
-        className="absolute top-0 right-0 h-96 w-96 -translate-y-1/2 translate-x-1/2 rounded-full opacity-30 blur-3xl"
+        className="absolute top-0 right-0 h-96 w-96 -translate-y-1/2 translate-x-1/2 rounded-full opacity-20 blur-3xl"
         style={{ background: "rgba(133, 196, 65, 0.15)" }}
+      />
+      <div
+        className="absolute bottom-0 left-0 h-96 w-96 translate-y-1/2 -translate-x-1/2 rounded-full opacity-20 blur-3xl"
+        style={{ background: "rgba(139, 92, 246, 0.15)" }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
@@ -102,73 +190,163 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+          className="mb-8 text-center"
         >
-          <span className="mb-4 inline-block rounded-full border border-[#85C441]/20 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30]">
+          <span className="mb-4 inline-block rounded-full border border-[#85C441]/20 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">
             About Us
           </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-[#1E5028] sm:text-4xl lg:text-5xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-[#1E5028] dark:text-white sm:text-4xl lg:text-5xl">
             What is Lichen?
           </h2>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[#7A8B95]">
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[#7A8B95] dark:text-white/60">
             More than a company — a symbiotic partnership that grows with your
             business. We bring technology, creativity, and strategy together.
           </p>
         </motion.div>
 
-        {/* Story Points */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="mb-20 grid gap-8 md:grid-cols-3"
+        {/* Curved Cards Axis Slider */}
+        <div
+          className="relative w-full h-[320px] md:h-[420px] overflow-hidden select-none"
         >
-          {storyPoints.map((point) => (
-            <motion.div
-              key={point.title}
-              variants={itemVariants}
-              className="group relative rounded-2xl border border-[#85C441]/10 bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg hover:shadow-[#85C441]/5 hover:-translate-y-1"
-            >
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#85C441]/10 transition-colors group-hover:bg-[#85C441]/20">
-                <point.icon className="h-6 w-6 text-[#4A7A30]" />
-              </div>
-              <h3 className="mb-3 text-xl font-semibold text-[#1E5028]">
-                {point.title}
-              </h3>
-              <p className="leading-relaxed text-[#7A8B95]">
-                {point.description}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          {/* Scrolling Cards */}
+          {(() => {
+            const N = storyCards.length;
+            const S = isMobile ? 0.42 : 0.25;
+            const totalSpan = N * S;
 
-        {/* Stats */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-2 gap-6 md:grid-cols-4"
-        >
-          {stats.map((stat) => (
+            let activeIndex = 0;
+            let minDist = totalSpan;
+            for (let k = 0; k < N; k++) {
+              const tk = (k * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
+              const diff = Math.abs(tk - 0.5);
+              const dist = diff > totalSpan / 2 ? totalSpan - diff : diff;
+              if (dist < minDist) {
+                minDist = dist;
+                activeIndex = k;
+              }
+            }
+
+            return storyCards.map((card, i) => {
+              const t = (i * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
+
+              const isVisible = t >= 0 && t <= 1;
+              const clampedT = Math.max(0, Math.min(1, t));
+
+              // Parabolic height formula: y = 350 - 800 * clampedT * (1 - clampedT)
+              // Percentage from top is y / 400 * 100%
+              const topPct = ((350 - 800 * clampedT * (1 - clampedT)) / 400) * 100;
+              const leftPct = t * 100;
+
+              const Icon = card.icon;
+              const isActive = i === activeIndex;
+
+              const baseOpacity = isVisible ? Math.sin(t * Math.PI) : 0;
+              const opacity = isActive ? 1.0 : baseOpacity * 0.7;
+              const pointerEvents = isVisible && t > 0.08 && t < 0.92 ? "auto" : "none";
+              const zIndex = isVisible ? (isActive ? 20 : Math.round(baseOpacity * 10)) : 0;
+
+              return (
+                <div
+                  key={i}
+                  className="absolute flex flex-col items-center select-none"
+                  style={{
+                    left: `${leftPct}%`,
+                    top: `${topPct}%`,
+                    transform: "translate(-50%, -50%)",
+                    opacity,
+                    pointerEvents,
+                    zIndex,
+                  }}
+                  onMouseEnter={() => setHoveredIndex(i)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  {/* Card Element */}
+                  <motion.div
+                    animate={{
+                      scale: isActive ? 1.05 : 0.92,
+                      borderColor: isActive 
+                        ? (isDark ? "#85C441" : "#4A7A30") 
+                        : (isDark ? "rgba(133, 196, 65, 0.25)" : "rgba(30, 80, 40, 0.1)"),
+                      boxShadow: isActive
+                        ? (isDark ? "0 8px 32px rgba(133, 196, 65, 0.25)" : "0 8px 32px rgba(30, 80, 40, 0.15)")
+                        : "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)"
+                    }}
+                    whileHover={{ scale: 1.08, y: -10 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className={`
+                      w-36 h-48 md:w-56 md:h-72 rounded-2xl border flex flex-col justify-between p-4 md:p-6 backdrop-blur-md cursor-pointer transition-colors duration-300
+                      ${isDark
+                        ? "bg-[#0E1F0F]/70 text-white"
+                        : "bg-white/80 text-[#1E5028]"
+                      }
+                    `}
+                  >
+                    {/* Card Header: Icon + Subtitle */}
+                    <div className="flex items-center justify-between">
+                      <div className="p-1.5 md:p-2 rounded-lg bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441]">
+                        <Icon className="h-4.5 w-4.5 md:h-6 md:w-6" />
+                      </div>
+                      <span className="text-[8px] md:text-[10px] uppercase font-bold tracking-wider opacity-60">
+                        {card.subtitle}
+                      </span>
+                    </div>
+
+                    {/* Card Body: Title + Description */}
+                    <div className="my-auto flex flex-col gap-1 md:gap-2">
+                      <h4 className="text-xs md:text-lg font-bold tracking-tight leading-tight">
+                        {card.title}
+                      </h4>
+                      <p className="text-[10px] md:text-xs leading-relaxed opacity-75 line-clamp-3 md:line-clamp-none">
+                        {card.description}
+                      </p>
+                    </div>
+
+                    {/* Card Footer: Brand Decor */}
+                    <div className="flex items-center justify-between border-t border-current/10 pt-2 md:pt-3">
+                      <span className="text-[8px] md:text-[9px] font-semibold tracking-wider uppercase opacity-50">
+                        Lichen Ecosystem
+                      </span>
+                      <div className="h-1.5 w-1.5 rounded-full bg-[#85C441]" />
+                    </div>
+                  </motion.div>
+                </div>
+              );
+            });
+          })()}
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-3xl mx-auto">
+          {[
+            { value: "150+", label: "Clients Served" },
+            { value: "500+", label: "Projects Completed" },
+            { value: "5+", label: "Years Experience" },
+            { value: "25+", label: "Team Members" }
+          ].map((stat, idx) => (
             <motion.div
-              key={stat.label}
-              variants={itemVariants}
-              className="relative rounded-2xl border border-[#85C441]/10 bg-white/80 p-8 text-center backdrop-blur-sm"
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+              whileHover={{ y: -3 }}
+              className={`
+                flex flex-col items-center justify-center py-4 px-3 md:py-5 md:px-4 rounded-2xl border text-center transition-all duration-300 backdrop-blur-md shadow-inner
+                ${isDark
+                  ? "bg-[#0E1F0F]/70 border-[#85C441]/20 hover:border-[#85C441]/40"
+                  : "bg-white/80 border-[#1E5028]/10 hover:border-[#1E5028]/25"
+                }
+              `}
             >
-              <div className="mb-2 text-4xl font-extrabold text-[#1E5028] sm:text-5xl">
-                <AnimatedCounter
-                  target={stat.value}
-                  suffix={stat.suffix}
-                />
-              </div>
-              <div className="text-sm font-medium text-[#7A8B95]">
+              <span className="text-2xl md:text-3xl font-extrabold text-[#1E5028] dark:text-[#85C441] tracking-tight">
+                <Counter value={stat.value} />
+              </span>
+              <span className="text-[10px] md:text-xs font-semibold text-[#7A8B95] dark:text-white/60 mt-1">
                 {stat.label}
-              </div>
+              </span>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
