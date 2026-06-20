@@ -2,94 +2,118 @@
 
 import { motion } from "framer-motion";
 import {
-  ArrowRight,
   Code2,
-  Megaphone,
   Palette,
+  Megaphone,
   TrendingUp,
+  Zap,
+  BarChart3,
+  ArrowUpRight,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const services = [
   {
     icon: Code2,
-    title: "Software & Tech Solutions",
-    titleBn: "সফটওয়্যার ও টেক সলিউশনস",
-    description:
-      "Custom software, web & mobile apps, ERP, CRM, e-commerce platforms, and SEO integration for your digital transformation.",
+    title: "Software & Tech.",
+    description: "Custom software, web & mobile apps, ERP, CRM systems.",
     href: "/services/software",
-    color: "#1E5028",
-    lightBg: "rgba(30, 80, 40, 0.08)",
-    items: ["Custom Software", "ERP & CRM", "E-commerce", "Mobile Apps"],
+    gridClass: "order-2 lg:col-start-1 lg:row-start-2",
+    gradientDir: "225deg", // Top-right corner (pointing to center)
   },
   {
     icon: Palette,
-    title: "Design, Print & Advertising",
-    titleBn: "ডিজাইন, প্রিন্ট ও এডভার্টাইজিং",
-    description:
-      "From digital and offset printing to apparel, packaging, gift items — complete design and print solutions for your brand.",
+    title: "Design & Print.",
+    description: "Digital printing, offset, apparel, packaging design.",
     href: "/services/print",
-    color: "#3A6E2A",
-    lightBg: "rgba(58, 110, 42, 0.08)",
-    items: ["Digital Printing", "Offset Printing", "Apparel", "Packaging"],
+    gridClass: "order-1 lg:col-start-2 lg:row-start-1",
+    gradientDir: "225deg", // Top-right corner (pointing to center)
   },
   {
     icon: Megaphone,
-    title: "Marketing Services",
-    titleBn: "মার্কেটিং সার্ভিস",
-    description:
-      "Social media marketing, content creation, brand identity design, and digital campaigns to grow your audience and revenue.",
+    title: "Marketing.",
+    description: "Social media, content creation, brand identity.",
     href: "/services/marketing",
-    color: "#4A7A30",
-    lightBg: "rgba(74, 122, 48, 0.08)",
-    items: ["Social Media", "Content Creation", "Brand Design", "Campaigns"],
+    gridClass: "order-3 lg:col-start-2 lg:row-start-2",
+    gradientDir: "225deg", // Top-right corner (pointing to center)
   },
   {
     icon: TrendingUp,
-    title: "Strategy & Consultancy",
-    titleBn: "স্ট্র্যাটেজি ও কনসালটেন্সি",
-    description:
-      "Data-driven brand consultancy, workflow analysis, market research, and strategic planning to guide your business growth.",
+    title: "Consultancy.",
+    description: "Brand consultancy, market research, strategy.",
     href: "/services/consultancy",
-    color: "#85C441",
-    lightBg: "rgba(133, 196, 65, 0.08)",
-    items: ["Brand Strategy", "Market Research", "Workflow Analysis", "Planning"],
+    gridClass: "order-5 lg:col-start-4 lg:row-start-1",
+    gradientDir: "135deg", // Top-left corner (pointing to center)
+  },
+  {
+    icon: Zap,
+    title: "Creative Manager.",
+    description: "Monthly expert management for content & automation.",
+    href: "/services/creative-manager",
+    gridClass: "order-6 lg:col-start-4 lg:row-start-2",
+    gradientDir: "135deg", // Top-left corner (pointing to center)
+  },
+  {
+    icon: BarChart3,
+    title: "Business Consultancy.",
+    description: "Free consultancy for strategic planning.",
+    href: "/services/business-consultancy",
+    gridClass: "order-7 lg:col-start-5 lg:row-start-2",
+    gradientDir: "135deg", // Top-left corner (pointing to center)
   },
 ];
 
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: { duration: 0.5, ease: "easeOut" },
   },
 };
 
 export default function ServicesSection() {
+  const { theme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const currentTheme = theme === "system" ? resolvedTheme : theme;
+  const isDark = !mounted || currentTheme === "dark";
+
   return (
-    <section id="services" className="relative py-24 sm:py-32">
-      {/* Background accent */}
+    <section id="services" className="relative py-24 sm:py-32 overflow-hidden bg-background">
+      {/* Background accents */}
       <div
-        className="absolute bottom-0 left-0 h-96 w-96 -translate-x-1/2 translate-y-1/2 rounded-full opacity-20 blur-3xl"
+        className="absolute bottom-0 left-0 h-96 w-96 -translate-x-1/2 translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none"
+        style={{ background: "rgba(133, 196, 65, 0.15)" }}
+      />
+      <div
+        className="absolute top-0 right-0 h-96 w-96 translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none"
         style={{ background: "rgba(133, 196, 65, 0.15)" }}
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+          transition={{ duration: 0.5 }}
+          className="mb-32 text-center"
         >
           <span className="mb-4 inline-block rounded-full border border-[#85C441]/20 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:bg-[#85C441]/5 dark:text-[#85C441]">
             Our Services
@@ -98,8 +122,7 @@ export default function ServicesSection() {
             Everything Your Business Needs
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Four core service areas working in harmony to deliver a true 360°
-            business solution.
+            Six core service areas working in harmony to deliver a true 360° business solution.
           </p>
         </motion.div>
 
@@ -109,61 +132,90 @@ export default function ServicesSection() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="grid gap-6 md:grid-cols-2 lg:grid-cols-4"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 lg:grid-rows-2 gap-6 items-stretch"
         >
-          {services.map((service) => (
-            <motion.div key={service.title} variants={cardVariants}>
-              <Link
-                href={service.href}
-                className="group relative flex h-full flex-col rounded-2xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-[#85C441]/8"
+          {services.map((service) => {
+            const Icon = service.icon;
+
+            return (
+              <motion.div
+                key={service.title}
+                variants={cardVariants}
+                className={`${service.gridClass} lg:order-none h-full`}
               >
-                {/* Icon */}
-                <div
-                  className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl transition-all duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: service.lightBg }}
+                <Link
+                  href={service.href}
+                  style={{
+                    border: "5px solid transparent",
+                    background: isDark
+                      ? `linear-gradient(to bottom, #0B0F0B, #040604) padding-box, linear-gradient(${service.gradientDir}, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+                      : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(${service.gradientDir}, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+                  }}
+                  className="relative flex h-full flex-col justify-start rounded-2xl p-3 shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]"
                 >
-                  <service.icon
-                    className="h-7 w-7 transition-colors"
-                    style={{ color: service.color }}
-                  />
-                </div>
-
-                {/* Title */}
-                <h3 className="mb-1 text-lg font-semibold text-foreground">
-                  {service.title}
-                </h3>
-                <p
-                  className="mb-3 text-xs text-muted-foreground"
-                  style={{ fontFamily: "var(--font-bengali)" }}
-                >
-                  {service.titleBn}
-                </p>
-
-                {/* Description */}
-                <p className="mb-5 flex-1 text-sm leading-relaxed text-muted-foreground">
-                  {service.description}
-                </p>
-
-                {/* Tags */}
-                <div className="mb-5 flex flex-wrap gap-1.5">
-                  {service.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-md border border-border bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+                  {/* Card Header: Icon Box + Title (inline flex) */}
+                  <div className="flex items-center gap-3.5">
+                    {/* Icon Box */}
+                    <div
+                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C5765D]/10 dark:bg-[#030A04]/90 border border-transparent dark:border-[#C5765D]/25"
                     >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                      <Icon className="h-4.5 w-4.5 text-[#C5765D] dark:text-[#C5765D]" />
+                    </div>
 
-                {/* CTA */}
-                <div className="flex items-center gap-1.5 text-sm font-medium transition-colors" style={{ color: service.color }}>
-                  Learn More
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+                    {/* Title */}
+                    <h3 className="text-lg font-bold text-[#1E5028] dark:text-white leading-snug tracking-tight">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  {/* Description & Learn More Icon inline flex */}
+                  <div className="mt-auto flex items-end justify-between gap-4 pt-4">
+                    <p className="text-sm leading-relaxed text-[#7A8B95] dark:text-white/60 line-clamp-2">
+                      {service.description}
+                    </p>
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white shadow-inner border border-neutral-200/20">
+                      <ArrowUpRight className="h-4 w-4 text-[#C5765D]" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
+
+          {/* Middle Logo Card */}
+          <motion.div
+            variants={cardVariants}
+            style={{
+              border: "5px solid transparent",
+              background: isDark
+                ? `linear-gradient(to bottom, #0B0F0B, #040604) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+                : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+            }}
+            className="order-4 lg:order-none lg:col-start-3 lg:row-start-1 lg:row-span-2 h-[260px] lg:h-auto flex flex-col items-center justify-center lg:justify-start lg:pt-20 p-8 rounded-2xl shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden lg:-mt-14"
+          >
+            {/* Ambient Terracotta Radial Glow */}
+            <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#C5765D]/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute inset-0 bg-[#C5765D]/3 opacity-0 blur-2xl pointer-events-none" />
+
+            {/* Centered Logo Box */}
+            <div
+              style={{
+                border: "5px solid transparent",
+                background: isDark
+                  ? `linear-gradient(to bottom, #030A04, #010401) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.20) 50%, transparent 100%) border-box`
+                  : `linear-gradient(to bottom, #ffffff, #fcfdfc) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.20) 50%, transparent 100%) border-box`
+              }}
+              className="relative p-5 w-24 h-24 rounded-2xl shadow-md dark:shadow-[0_0_20px_rgba(197,118,93,0.15)] flex items-center justify-center z-10"
+            >
+              <Image
+                src="/single_logo.png"
+                width={54}
+                height={54}
+                alt="Lichen Logo"
+                className="brightness-110 object-contain"
+              />
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ModeToggle } from "./ModeToggle";
@@ -74,9 +75,20 @@ const serviceItems = [
 ];
 
 const Header = () => {
+  const pathname = usePathname();
+  const isHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,6 +96,15 @@ const Header = () => {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -98,13 +119,18 @@ const Header = () => {
     };
   }, [mobileMenuOpen]);
 
+  // Home page has its own HeroSection navbar on desktop — but on mobile (width < 768px), we use the global mobile header.
+  // We check 'mounted' to ensure that we render matches correctly during SSR and avoid hydration warning.
+  if (isHome && (!mounted || !isMobile)) return null;
+
   return (
     <>
       <nav
-        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 md:px-10 ${scrolled
+        className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-500 transform md:px-10 ${
+          scrolled
             ? "border-b border-border/40 bg-background/90 shadow-sm backdrop-blur-xl text-foreground"
             : "bg-transparent text-white"
-          }`}
+        } opacity-100 translate-y-0`}
       >
         {/* 1. LEFT: Logo */}
         <div className="flex items-center">
@@ -116,7 +142,7 @@ const Header = () => {
               alt="Lichen BTS"
               priority
               style={{ height: "auto" }}
-              className={`transition-all duration-300 ${!scrolled ? "brightness-0 invert" : ""}`}
+              className={`transition-all duration-300 ${!scrolled ? "brightness-0 invert" : "dark:brightness-0 dark:invert"}`}
             />
           </Link>
         </div>
