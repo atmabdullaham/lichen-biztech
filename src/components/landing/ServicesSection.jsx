@@ -95,7 +95,7 @@ export default function ServicesSection() {
   const isDark = !mounted || currentTheme === "dark";
 
   return (
-    <section id="services" className="relative py-24 sm:py-32 overflow-hidden bg-background">
+    <section id="services" className="relative py-24 sm:py-32 overflow-hidden bg-white dark:bg-background">
       {/* Background accents */}
       <div
         className="absolute bottom-0 left-0 h-96 w-96 -translate-x-1/2 translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none"
