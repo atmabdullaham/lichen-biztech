@@ -276,3 +276,78 @@ html.lenis, html.lenis body {
   pointer-events: none;
 }
 
+
+
+/* ===== Footer Watermark Background Text ===== */
+.footer-watermark {
+  position: absolute;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(100px, 22vw, 320px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+
+  /* Gradient fill: brand green at bottom fading to transparent toward top */
+  background: linear-gradient(
+    to top,
+    rgba(133, 196, 65, 0.12) 0%,
+    rgba(133, 196, 65, 0.04) 50%,
+    rgba(133, 196, 65, 0.005) 90%,
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Flow Down Animation ===== */
+@keyframes flow-down {
+  0% {
+    top: -50px;
+  }
+  100% {
+    top: 320px;
+  }
+}
+
+.animate-flow-down {
+  animation: flow-down 6s linear infinite;
+}
+
+/* ===== Sand Timer Flow Animation ===== */
+@keyframes sand-flow-animation {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  48% {
+    transform: translateY(125px) scale(0.65);
+    opacity: 0.9;
+  }
+  52% {
+    transform: translateY(135px) scale(0.65);
+    opacity: 0.9;
+  }
+  95% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(260px) scale(1);
+    opacity: 0;
+  }
+}
+
+.animate-sand-particle {
+  animation: sand-flow-animation 4.5s linear infinite;
+  transform-origin: center;
+}
+
