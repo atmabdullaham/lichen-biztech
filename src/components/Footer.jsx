@@ -63,7 +63,7 @@ const Footer = () => {
   return (
     <footer
       className="relative overflow-hidden border-t border-white/5"
-      style={{ backgroundColor: "#0E2A14" }}
+      style={{ backgroundColor: "#071a0c" }}
     >
       {/* Decorative gradient orb */}
       <div
@@ -71,7 +71,12 @@ const Footer = () => {
         style={{ background: "rgba(133, 196, 65, 0.3)" }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-8 lg:px-8">
+      {/* Large background ghost text */}
+      <div className="footer-watermark" aria-hidden="true">
+        Lichen
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 lg:px-8">
         {/* Main Footer Grid */}
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Column 1: Brand */}
