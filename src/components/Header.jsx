@@ -142,7 +142,7 @@ const Header = () => {
               alt="Lichen BTS"
               priority
               style={{ height: "auto" }}
-              className={`transition-all duration-300 ${!scrolled ? "brightness-0 invert" : "dark:brightness-0 dark:invert"}`}
+              className={`transition-all duration-300 ${!scrolled ? "" : "dark:brightness-0 dark:invert"}`}
             />
           </Link>
         </div>
@@ -167,7 +167,10 @@ const Header = () => {
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[650px] md:grid-cols-[1fr_2fr]">
                     {/* Left Sidebar Info */}
-                    <li className="row-span-6 rounded-xl p-5" style={{ background: "var(--gradient-hero)" }}>
+                    <li
+                      className="row-span-6 rounded-xl p-5"
+                      style={{ background: "var(--gradient-hero)" }}
+                    >
                       <div className="mb-3 mt-4 text-lg font-bold text-white">
                         Lichen Ecosystem
                       </div>
@@ -319,8 +322,9 @@ const Header = () => {
                       >
                         Services
                         <ChevronDown
-                          className={`h-4 w-4 transition-transform duration-200 ${mobileServicesOpen ? "rotate-180" : ""
-                            }`}
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            mobileServicesOpen ? "rotate-180" : ""
+                          }`}
                         />
                       </button>
 

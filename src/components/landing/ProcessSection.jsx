@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { CheckCircle2, ClipboardList, Truck } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
+import SectionHeader from "../re_use_able/SectionHeader";
 
 const steps = [
   {
@@ -56,29 +57,63 @@ export default function ProcessSection() {
   });
 
   // Timeline path length (complete at 0.7 scroll progress to avoid spilling into other sections)
-  const pathLength = useTransform(smoothProgress, [0.05, 0.7], [0, 1], { clamp: true });
+  const pathLength = useTransform(smoothProgress, [0.05, 0.7], [0, 1], {
+    clamp: true,
+  });
 
   // Motion transformations for Step 1 (Show initially)
-  const step1Opacity = useTransform(smoothProgress, [0, 0.15], [1, 1], { clamp: true });
-  const step1Scale = useTransform(smoothProgress, [0, 0.15], [1, 1], { clamp: true });
-  const step1GlowOpacity = useTransform(smoothProgress, [0, 0.15], [0.8, 1], { clamp: true });
+  const step1Opacity = useTransform(smoothProgress, [0, 0.15], [1, 1], {
+    clamp: true,
+  });
+  const step1Scale = useTransform(smoothProgress, [0, 0.15], [1, 1], {
+    clamp: true,
+  });
+  const step1GlowOpacity = useTransform(smoothProgress, [0, 0.15], [0.8, 1], {
+    clamp: true,
+  });
 
   // Motion transformations for Step 2
-  const step2Opacity = useTransform(smoothProgress, [0.15, 0.4], [0, 1], { clamp: true });
-  const step2Y = useTransform(smoothProgress, [0.15, 0.4], [40, 0], { clamp: true });
-  const step2Scale = useTransform(smoothProgress, [0.15, 0.4], [0.95, 1], { clamp: true });
-  const step2GlowOpacity = useTransform(smoothProgress, [0.35, 0.45], [0, 1], { clamp: true });
+  const step2Opacity = useTransform(smoothProgress, [0.15, 0.4], [0, 1], {
+    clamp: true,
+  });
+  const step2Y = useTransform(smoothProgress, [0.15, 0.4], [40, 0], {
+    clamp: true,
+  });
+  const step2Scale = useTransform(smoothProgress, [0.15, 0.4], [0.95, 1], {
+    clamp: true,
+  });
+  const step2GlowOpacity = useTransform(smoothProgress, [0.35, 0.45], [0, 1], {
+    clamp: true,
+  });
 
   // Motion transformations for Step 3
-  const step3Opacity = useTransform(smoothProgress, [0.4, 0.65], [0, 1], { clamp: true });
-  const step3Y = useTransform(smoothProgress, [0.4, 0.65], [40, 0], { clamp: true });
-  const step3Scale = useTransform(smoothProgress, [0.4, 0.65], [0.95, 1], { clamp: true });
-  const step3GlowOpacity = useTransform(smoothProgress, [0.6, 0.7], [0, 1], { clamp: true });
+  const step3Opacity = useTransform(smoothProgress, [0.4, 0.65], [0, 1], {
+    clamp: true,
+  });
+  const step3Y = useTransform(smoothProgress, [0.4, 0.65], [40, 0], {
+    clamp: true,
+  });
+  const step3Scale = useTransform(smoothProgress, [0.4, 0.65], [0.95, 1], {
+    clamp: true,
+  });
+  const step3GlowOpacity = useTransform(smoothProgress, [0.6, 0.7], [0, 1], {
+    clamp: true,
+  });
 
   const stepsMotion = [
     { opacity: step1Opacity, y: 0, scale: step1Scale, glow: step1GlowOpacity },
-    { opacity: step2Opacity, y: step2Y, scale: step2Scale, glow: step2GlowOpacity },
-    { opacity: step3Opacity, y: step3Y, scale: step3Scale, glow: step3GlowOpacity },
+    {
+      opacity: step2Opacity,
+      y: step2Y,
+      scale: step2Scale,
+      glow: step2GlowOpacity,
+    },
+    {
+      opacity: step3Opacity,
+      y: step3Y,
+      scale: step3Scale,
+      glow: step3GlowOpacity,
+    },
   ];
 
   return (
@@ -100,23 +135,11 @@ export default function ProcessSection() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-20 text-center"
-        >
-          <span className="mb-4 inline-block rounded-full border border-black/10 dark:border-white/10 bg-[#85C441]/10 dark:bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">
-            Our Process
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-[#1E5028] dark:text-white sm:text-4xl lg:text-5xl">
-            How We Work
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-neutral-600 dark:text-white/60">
-            A seamless 3-step collaboration process designed to bring your vision to life.
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge="Our Process"
+          title="How We Work"
+          description="A seamless 3-step collaboration process designed to bring your vision to life."
+        />
 
         {/* Desktop Process Flow (Staggered layout + curved dashed timeline) */}
         <div className="relative w-full h-[520px] hidden md:block select-none">
@@ -130,7 +153,13 @@ export default function ProcessSection() {
           >
             <defs>
               {/* Dynamic glowing gradient for active path */}
-              <linearGradient id="active-line-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient
+                id="active-line-grad"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              >
                 <stop offset="0%" stopColor="#3A6E2A" />
                 <stop offset="50%" stopColor="#85C441" />
                 <stop offset="100%" stopColor="#85C441" />
@@ -153,7 +182,9 @@ export default function ProcessSection() {
             <path
               d="M 150 68 C 320 68, 320 268, 500 268 C 680 268, 680 68, 850 68"
               fill="none"
-              stroke={isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(30, 80, 40, 0.1)"}
+              stroke={
+                isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(30, 80, 40, 0.1)"
+              }
               strokeWidth="4"
               strokeDasharray="12 12"
               strokeLinecap="round"
@@ -185,30 +216,37 @@ export default function ProcessSection() {
 
           {/* Step 1 Card (Desktop - Left & Top-aligned) */}
           <motion.div
-            style={{ opacity: stepsMotion[0].opacity, scale: stepsMotion[0].scale }}
+            style={{
+              opacity: stepsMotion[0].opacity,
+              scale: stepsMotion[0].scale,
+            }}
             className="absolute left-0 top-[20px] w-[30%] text-center group cursor-default"
           >
             {/* Step circle container */}
             <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center select-none z-10">
               {/* Outer faint glow rings */}
               <div className="absolute inset-0 rounded-full bg-[#85C441]/10 border border-[#85C441]/20 scale-110 group-hover:scale-125 transition-transform duration-500" />
-              
+
               {/* Inactive state circle (with dark text for light mode, light text for dark mode) */}
               <div className="absolute inset-0 rounded-full border-2 border-[#85C441] bg-white dark:bg-[#0A1F10]/80 shadow-[0_0_15px_rgba(133,196,65,0.15)] flex items-center justify-center">
                 <div className="relative flex flex-col items-center justify-center text-[#1E5028] dark:text-white">
                   <ClipboardList className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">STEP 01</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">
+                    STEP 01
+                  </span>
                 </div>
               </div>
-              
+
               {/* Solid filled active circle */}
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[0].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] shadow-[0_0_25px_rgba(133,196,65,0.5)] flex items-center justify-center"
               >
                 <div className="relative flex flex-col items-center justify-center text-white">
                   <ClipboardList className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">STEP 01</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">
+                    STEP 01
+                  </span>
                 </div>
               </motion.div>
             </div>
@@ -217,7 +255,7 @@ export default function ProcessSection() {
             <div className="relative rounded-2xl border border-black/5 dark:border-white/5 bg-white/70 dark:bg-black/20 p-5 backdrop-blur-md shadow-lg group-hover:-translate-y-2 group-hover:border-[#85C441]/35 group-hover:shadow-[0_15px_30px_rgba(133,196,65,0.08)] transition-all duration-300">
               {/* Decorative side glow bar */}
               <div className="absolute top-4 left-0 bottom-4 w-[3px] rounded-r-md bg-gradient-to-b from-[#85C441] to-transparent opacity-40" />
-              
+
               <h3 className="mb-2 text-lg font-bold text-[#1E5028] dark:text-white group-hover:text-[#85C441] transition-colors duration-200">
                 {steps[0].title}
               </h3>
@@ -229,10 +267,10 @@ export default function ProcessSection() {
 
           {/* Step 2 Card (Desktop - Middle & Bottom-aligned) */}
           <motion.div
-            style={{ 
-              opacity: stepsMotion[1].opacity, 
-              y: stepsMotion[1].y, 
-              scale: stepsMotion[1].scale 
+            style={{
+              opacity: stepsMotion[1].opacity,
+              y: stepsMotion[1].y,
+              scale: stepsMotion[1].scale,
             }}
             className="absolute left-[35%] top-[220px] w-[30%] text-center group cursor-default"
           >
@@ -240,23 +278,27 @@ export default function ProcessSection() {
             <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center select-none z-10">
               {/* Outer faint glow rings */}
               <div className="absolute inset-0 rounded-full bg-[#85C441]/10 border border-[#85C441]/20 scale-110 group-hover:scale-125 transition-transform duration-500" />
-              
+
               {/* Inactive state outline */}
               <div className="absolute inset-0 rounded-full border-2 border-black/15 dark:border-white/15 bg-white dark:bg-[#0A1F10]/60 flex items-center justify-center">
                 <div className="relative flex flex-col items-center justify-center text-[#1E5028] dark:text-white">
                   <CheckCircle2 className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">STEP 02</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">
+                    STEP 02
+                  </span>
                 </div>
               </div>
-              
+
               {/* Solid filled active circle */}
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[1].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] shadow-[0_0_25px_rgba(133,196,65,0.5)] flex items-center justify-center"
               >
                 <div className="relative flex flex-col items-center justify-center text-white">
                   <CheckCircle2 className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">STEP 02</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">
+                    STEP 02
+                  </span>
                 </div>
               </motion.div>
             </div>
@@ -268,7 +310,7 @@ export default function ProcessSection() {
                 style={{ opacity: stepsMotion[1].glow }}
                 className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-[#85C441] to-transparent pointer-events-none"
               />
-              
+
               <h3 className="mb-2 text-lg font-bold text-[#1E5028] dark:text-white group-hover:text-[#85C441] transition-colors duration-200">
                 {steps[1].title}
               </h3>
@@ -280,10 +322,10 @@ export default function ProcessSection() {
 
           {/* Step 3 Card (Desktop - Right & Top-aligned) */}
           <motion.div
-            style={{ 
-              opacity: stepsMotion[2].opacity, 
-              y: stepsMotion[2].y, 
-              scale: stepsMotion[2].scale 
+            style={{
+              opacity: stepsMotion[2].opacity,
+              y: stepsMotion[2].y,
+              scale: stepsMotion[2].scale,
             }}
             className="absolute left-[70%] top-[20px] w-[30%] text-center group cursor-default"
           >
@@ -291,23 +333,27 @@ export default function ProcessSection() {
             <div className="relative mx-auto mb-6 flex h-24 w-24 items-center justify-center select-none z-10">
               {/* Outer faint glow rings */}
               <div className="absolute inset-0 rounded-full bg-[#85C441]/10 border border-[#85C441]/20 scale-110 group-hover:scale-125 transition-transform duration-500" />
-              
+
               {/* Inactive state outline */}
               <div className="absolute inset-0 rounded-full border-2 border-black/15 dark:border-white/15 bg-white dark:bg-[#0A1F10]/60 flex items-center justify-center">
                 <div className="relative flex flex-col items-center justify-center text-[#1E5028] dark:text-white">
                   <Truck className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">STEP 03</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-80 mt-0.5">
+                    STEP 03
+                  </span>
                 </div>
               </div>
-              
+
               {/* Solid filled active circle */}
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[2].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] shadow-[0_0_25px_rgba(133,196,65,0.5)] flex items-center justify-center"
               >
                 <div className="relative flex flex-col items-center justify-center text-white">
                   <Truck className="h-6 w-6 text-current" />
-                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">STEP 03</span>
+                  <span className="text-[9px] font-extrabold tracking-wider opacity-90 mt-0.5">
+                    STEP 03
+                  </span>
                 </div>
               </motion.div>
             </div>
@@ -356,7 +402,9 @@ export default function ProcessSection() {
               <path
                 d="M 50 20 C 80 150, 20 250, 50 350 C 80 450, 20 550, 50 780"
                 fill="none"
-                stroke={isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(30, 80, 40, 0.1)"}
+                stroke={
+                  isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(30, 80, 40, 0.1)"
+                }
                 strokeWidth="4"
                 strokeDasharray="10 10"
                 strokeLinecap="round"
@@ -377,7 +425,10 @@ export default function ProcessSection() {
 
           {/* Step 1 Card (Mobile) */}
           <motion.div
-            style={{ opacity: stepsMotion[0].opacity, scale: stepsMotion[0].scale }}
+            style={{
+              opacity: stepsMotion[0].opacity,
+              scale: stepsMotion[0].scale,
+            }}
             className="relative flex flex-col items-start gap-4 group cursor-default"
           >
             {/* Step Circle overlaying line */}
@@ -386,7 +437,7 @@ export default function ProcessSection() {
               <div className="absolute inset-0 rounded-full border-2 border-[#85C441] bg-white dark:bg-[#0A1F10]/80 flex items-center justify-center shadow-[0_0_10px_rgba(133,196,65,0.15)]">
                 <ClipboardList className="h-5 w-5 text-[#1E5028] dark:text-white" />
               </div>
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[0].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] flex items-center justify-center shadow-[0_0_15px_rgba(133,196,65,0.4)]"
               >
@@ -396,7 +447,9 @@ export default function ProcessSection() {
 
             {/* Content Card */}
             <div className="w-full rounded-2xl border border-black/5 dark:border-white/5 bg-white/70 dark:bg-black/20 p-5 backdrop-blur-md shadow-md group-hover:border-[#85C441]/25 transition-all duration-300">
-              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">STEP 01</span>
+              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">
+                STEP 01
+              </span>
               <h3 className="mb-2 text-base font-bold text-[#1E5028] dark:text-white group-hover:text-[#85C441] transition-colors duration-200">
                 {steps[0].title}
               </h3>
@@ -408,10 +461,10 @@ export default function ProcessSection() {
 
           {/* Step 2 Card (Mobile) */}
           <motion.div
-            style={{ 
-              opacity: stepsMotion[1].opacity, 
-              y: stepsMotion[1].y, 
-              scale: stepsMotion[1].scale 
+            style={{
+              opacity: stepsMotion[1].opacity,
+              y: stepsMotion[1].y,
+              scale: stepsMotion[1].scale,
             }}
             className="relative flex flex-col items-start gap-4 group cursor-default"
           >
@@ -421,7 +474,7 @@ export default function ProcessSection() {
               <div className="absolute inset-0 rounded-full border-2 border-black/15 dark:border-white/15 bg-white dark:bg-[#0A1F10]/60 flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-[#1E5028] dark:text-white" />
               </div>
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[1].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] flex items-center justify-center shadow-[0_0_15px_rgba(133,196,65,0.4)]"
               >
@@ -431,7 +484,9 @@ export default function ProcessSection() {
 
             {/* Content Card */}
             <div className="w-full rounded-2xl border border-black/5 dark:border-white/5 bg-white/70 dark:bg-black/20 p-5 backdrop-blur-md shadow-md group-hover:border-[#85C441]/25 transition-all duration-300">
-              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">STEP 02</span>
+              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">
+                STEP 02
+              </span>
               <h3 className="mb-2 text-base font-bold text-[#1E5028] dark:text-white group-hover:text-[#85C441] transition-colors duration-200">
                 {steps[1].title}
               </h3>
@@ -443,10 +498,10 @@ export default function ProcessSection() {
 
           {/* Step 3 Card (Mobile) */}
           <motion.div
-            style={{ 
-              opacity: stepsMotion[2].opacity, 
-              y: stepsMotion[2].y, 
-              scale: stepsMotion[2].scale 
+            style={{
+              opacity: stepsMotion[2].opacity,
+              y: stepsMotion[2].y,
+              scale: stepsMotion[2].scale,
             }}
             className="relative flex flex-col items-start gap-4 group cursor-default"
           >
@@ -456,7 +511,7 @@ export default function ProcessSection() {
               <div className="absolute inset-0 rounded-full border-2 border-black/15 dark:border-white/15 bg-white dark:bg-[#0A1F10]/60 flex items-center justify-center">
                 <Truck className="h-5 w-5 text-[#1E5028] dark:text-white" />
               </div>
-              <motion.div 
+              <motion.div
                 style={{ opacity: stepsMotion[2].glow }}
                 className="absolute inset-0 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] flex items-center justify-center shadow-[0_0_15px_rgba(133,196,65,0.4)]"
               >
@@ -466,7 +521,9 @@ export default function ProcessSection() {
 
             {/* Content Card */}
             <div className="w-full rounded-2xl border border-black/5 dark:border-white/5 bg-white/70 dark:bg-black/20 p-5 backdrop-blur-md shadow-md group-hover:border-[#85C441]/25 transition-all duration-300">
-              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">STEP 03</span>
+              <span className="text-[10px] font-extrabold tracking-wider text-[#4A7A30] dark:text-[#85C441] mb-1 block">
+                STEP 03
+              </span>
               <h3 className="mb-2 text-base font-bold text-[#1E5028] dark:text-white group-hover:text-[#85C441] transition-colors duration-200">
                 {steps[2].title}
               </h3>

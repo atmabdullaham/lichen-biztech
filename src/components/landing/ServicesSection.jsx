@@ -2,18 +2,19 @@
 
 import { motion } from "framer-motion";
 import {
+  ArrowUpRight,
+  BarChart3,
   Code2,
-  Palette,
   Megaphone,
+  Palette,
   TrendingUp,
   Zap,
-  BarChart3,
-  ArrowUpRight,
 } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import SectionHeader from "../re_use_able/SectionHeader";
 
 const services = [
   {
@@ -95,7 +96,10 @@ export default function ServicesSection() {
   const isDark = !mounted || currentTheme === "dark";
 
   return (
-    <section id="services" className="relative py-24 sm:py-32 overflow-hidden bg-white dark:bg-background">
+    <section
+      id="services"
+      className="relative py-8 md:py-16  overflow-hidden bg-white dark:bg-background"
+    >
       {/* Background accents */}
       <div
         className="absolute bottom-0 left-0 h-96 w-96 -translate-x-1/2 translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none"
@@ -108,23 +112,11 @@ export default function ServicesSection() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-          className="mb-32 text-center"
-        >
-          <span className="mb-4 inline-block rounded-full border border-[#85C441]/20 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:bg-[#85C441]/5 dark:text-[#85C441]">
-            Our Services
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-            Everything Your Business Needs
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Six core service areas working in harmony to deliver a true 360° business solution.
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge="Our Services"
+          title="Everything Your Business Needs"
+          description="Six core service areas working in harmony to deliver a true 360° business solution."
+        />
 
         {/* Service Cards Grid */}
         <motion.div
@@ -146,20 +138,18 @@ export default function ServicesSection() {
                 <Link
                   href={service.href}
                   style={{
-                    border: "5px solid transparent",
+                    border: "1px solid transparent",
                     background: isDark
                       ? `linear-gradient(to bottom, #0B0F0B, #040604) padding-box, linear-gradient(${service.gradientDir}, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
-                      : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(${service.gradientDir}, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+                      : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(${service.gradientDir}, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`,
                   }}
                   className="relative flex h-full flex-col justify-start rounded-2xl p-3 shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)]"
                 >
                   {/* Card Header: Icon Box + Title (inline flex) */}
                   <div className="flex items-center gap-3.5">
                     {/* Icon Box */}
-                    <div
-                      className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C5765D]/10 dark:bg-[#030A04]/90 border border-transparent dark:border-[#C5765D]/25"
-                    >
-                      <Icon className="h-4.5 w-4.5 text-[#C5765D] dark:text-[#C5765D]" />
+                    <div className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-light/10 border border-transparent dark:border-[#C5765D]/25">
+                      <Icon className="h-4.5 w-4.5 text-[#1E5028] dark:text-white" />
                     </div>
 
                     {/* Title */}
@@ -186,10 +176,9 @@ export default function ServicesSection() {
           <motion.div
             variants={cardVariants}
             style={{
-              border: "5px solid transparent",
               background: isDark
                 ? `linear-gradient(to bottom, #0B0F0B, #040604) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
-                : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
+                : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`,
             }}
             className="order-4 lg:order-none lg:col-start-3 lg:row-start-1 lg:row-span-2 h-[260px] lg:h-auto flex flex-col items-center justify-center lg:justify-start lg:pt-20 p-8 rounded-2xl shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden lg:-mt-14"
           >
@@ -200,17 +189,16 @@ export default function ServicesSection() {
             {/* Centered Logo Box */}
             <div
               style={{
-                border: "5px solid transparent",
                 background: isDark
                   ? `linear-gradient(to bottom, #030A04, #010401) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.20) 50%, transparent 100%) border-box`
-                  : `linear-gradient(to bottom, #ffffff, #fcfdfc) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.20) 50%, transparent 100%) border-box`
+                  : `linear-gradient(to bottom, #ffffff, #fcfdfc) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.20) 50%, transparent 100%) border-box`,
               }}
-              className="relative p-5 w-24 h-24 rounded-2xl shadow-md dark:shadow-[0_0_20px_rgba(197,118,93,0.15)] flex items-center justify-center z-10"
+              className="relative   rounded-xl shadow-md dark:shadow-[0_0_20px_rgba(197,118,93,0.15)] flex items-center justify-center z-10"
             >
               <Image
                 src="/single_logo.png"
-                width={54}
-                height={54}
+                width={80}
+                height={80}
                 alt="Lichen Logo"
                 className="brightness-110 object-contain"
               />
