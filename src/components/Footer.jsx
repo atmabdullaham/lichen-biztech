@@ -1,14 +1,10 @@
 import {
   Code2,
-  ExternalLink,
-  Globe,
   Mail,
   MapPin,
   Megaphone,
-  MessageCircleX,
   Palette,
   Phone,
-  Share2,
   TrendingUp,
 } from "lucide-react";
 import Image from "next/image";
@@ -54,9 +50,21 @@ function LinkedInIcon({ className }) {
 }
 
 const socials = [
-  { name: "Facebook", icon: FacebookIcon, href: "https://facebook.com/lichenbts" },
-  { name: "Instagram", icon: InstagramIcon, href: "https://instagram.com/lichenbts" },
-  { name: "LinkedIn", icon: LinkedInIcon, href: "https://linkedin.com/company/lichenbts" },
+  {
+    name: "Facebook",
+    icon: FacebookIcon,
+    href: "https://facebook.com/lichenbts",
+  },
+  {
+    name: "Instagram",
+    icon: InstagramIcon,
+    href: "https://instagram.com/lichenbts",
+  },
+  {
+    name: "LinkedIn",
+    icon: LinkedInIcon,
+    href: "https://linkedin.com/company/lichenbts",
+  },
 ];
 
 const Footer = () => {
@@ -88,7 +96,7 @@ const Footer = () => {
                 height={44}
                 alt="Lichen BTS"
                 style={{ height: "auto" }}
-                className="brightness-0 invert"
+                className=""
               />
             </Link>
             <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
@@ -175,7 +183,6 @@ const Footer = () => {
                 >
                   <Phone className="h-4 w-4 shrink-0 text-[#85C441]/60" />
                   +8801879514881
-
                 </a>
               </li>
               <li>
@@ -185,7 +192,6 @@ const Footer = () => {
                 >
                   <Phone className="h-4 w-4 shrink-0 text-[#85C441]/60" />
                   +8801521223351
-
                 </a>
               </li>
               <li>
