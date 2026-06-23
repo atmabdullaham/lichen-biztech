@@ -108,7 +108,7 @@ function Counter({ value, duration = 2 }) {
 export default function AboutSection() {
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [timeProgress, setTimeProgress] = useState(0.5); // Start so the middle card is active
+  const [timeProgress, setTimeProgress] = useState(0.5);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const hoveredIndexRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -141,7 +141,8 @@ export default function AboutSection() {
 
       setTimeProgress((prev) => {
         const N = storyCards.length;
-        const S = isMobile ? 0.42 : 0.25;
+        // Increased mobile spread from 0.42 to 0.48 to accommodate wider cards
+        const S = isMobile ? 0.48 : 0.25;
         const totalSpan = N * S;
         let closestIndex = 0;
         let minDist = totalSpan;
@@ -155,12 +156,10 @@ export default function AboutSection() {
           }
         }
 
-        // If the hovered index is the closest one to the middle, don't increment (pause scroll)
         if (hoveredIndexRef.current === closestIndex) {
           return prev;
         }
 
-        // Scroll speed: completes full loop in 25 seconds
         return (prev + delta / 25000) % 1;
       });
 
@@ -192,19 +191,18 @@ export default function AboutSection() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section Header */}
         <SectionHeader
           badge="About Us"
           title="What is Lichen?"
           description="More than a company — a symbiotic partnership that grows with your business."
         />
 
-        {/* Curved Cards Axis Slider */}
-        <div className="relative w-full h-[320px] md:h-[420px] overflow-hidden select-none">
-          {/* Scrolling Cards */}
+        {/* Curved Cards Axis Slider - Increased mobile height from 320px to 380px */}
+        <div className="relative w-full h-[380px] md:h-[420px] overflow-hidden select-none mt-4">
           {(() => {
             const N = storyCards.length;
-            const S = isMobile ? 0.42 : 0.25;
+            // Increased mobile spread from 0.42 to 0.48 to accommodate wider cards
+            const S = isMobile ? 0.48 : 0.25;
             const totalSpan = N * S;
 
             let activeIndex = 0;
@@ -227,8 +225,6 @@ export default function AboutSection() {
               const isVisible = t >= 0 && t <= 1;
               const clampedT = Math.max(0, Math.min(1, t));
 
-              // Parabolic height formula: y = 350 - 800 * clampedT * (1 - clampedT)
-              // Percentage from top is y / 400 * 100%
               const topPct =
                 ((350 - 800 * clampedT * (1 - clampedT)) / 400) * 100;
               const leftPct = t * 100;
@@ -261,7 +257,6 @@ export default function AboutSection() {
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  {/* Card Element */}
                   <motion.div
                     animate={{
                       scale: isActive ? 1.05 : 0.92,
@@ -281,7 +276,7 @@ export default function AboutSection() {
                     whileHover={{ scale: 1.08, y: -10 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className={`
-                      w-36 h-48 md:w-56 md:h-72 rounded-2xl border flex flex-col justify-between p-4 md:p-6 backdrop-blur-md cursor-pointer transition-colors duration-300
+                      w-48 h-64 md:w-56 md:h-72 rounded-2xl border flex flex-col justify-between p-5 md:p-6 backdrop-blur-md cursor-pointer transition-colors duration-300
                       ${
                         isDark
                           ? "bg-[#0E1F0F]/70 text-white"
@@ -289,29 +284,29 @@ export default function AboutSection() {
                       }
                     `}
                   >
-                    {/* Card Header: Icon + Subtitle */}
+                    {/* Card Header */}
                     <div className="flex items-center justify-between">
-                      <div className="p-1.5 md:p-2 rounded-lg bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441]">
-                        <Icon className="h-4.5 w-4.5 md:h-6 md:w-6" />
+                      <div className="p-2 rounded-lg bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441]">
+                        <Icon className="h-5 w-5 md:h-6 md:w-6" />
                       </div>
-                      <span className="text-[8px] md:text-[10px] uppercase font-bold tracking-wider opacity-60">
+                      <span className="text-[10px] md:text-[11px] uppercase font-bold tracking-wider opacity-60">
                         {card.subtitle}
                       </span>
                     </div>
 
-                    {/* Card Body: Title + Description */}
-                    <div className="my-auto flex flex-col gap-1 md:gap-2">
-                      <h4 className="text-xs md:text-lg font-bold tracking-tight leading-tight">
+                    {/* Card Body */}
+                    <div className="my-auto flex flex-col gap-1.5 md:gap-2">
+                      <h4 className="text-sm md:text-lg font-bold tracking-tight leading-tight">
                         {card.title}
                       </h4>
-                      <p className="text-[10px] md:text-xs leading-relaxed opacity-75 line-clamp-3 md:line-clamp-none">
+                      <p className="text-xs md:text-sm leading-relaxed opacity-75 line-clamp-4 md:line-clamp-none">
                         {card.description}
                       </p>
                     </div>
 
-                    {/* Card Footer: Brand Decor */}
-                    <div className="flex items-center justify-between border-t border-current/10 pt-2 md:pt-3">
-                      <span className="text-[8px] md:text-[9px] font-semibold tracking-wider uppercase opacity-50">
+                    {/* Card Footer */}
+                    <div className="flex items-center justify-between border-t border-current/10 pt-3">
+                      <span className="text-[9px] md:text-[10px] font-semibold tracking-wider uppercase opacity-50">
                         Lichen Ecosystem
                       </span>
                       <div className="h-1.5 w-1.5 rounded-full bg-[#85C441]" />
@@ -324,7 +319,7 @@ export default function AboutSection() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-3xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 md:mt-10 max-w-3xl mx-auto">
           {[
             { value: "150+", label: "Clients Served" },
             { value: "500+", label: "Projects Completed" },
