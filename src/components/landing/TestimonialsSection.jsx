@@ -21,23 +21,23 @@ const testimonialsData = [
   {
     quote:
       "Lichen transformed our online presence completely. Their software team built us a custom ERP that saved us 40% in operational costs. The best tech partner in Chittagong!",
-    name: "Rafiul Islam",
+    name: "Mohammad Arshad",
     designation: "Managing Director, GreenTech Solutions Ltd.",
-    src: "https://ik.imagekit.io/atm/received_3112859895654532_BfrahsZEH.jpeg",
+    src: "https://ik.imagekit.io/atm/inbound6736955761763705808_p7xDijuKg.jpg?updatedAt=1779650796817",
   },
   {
     quote:
       "From our brand identity redesign to ongoing social media management, Lichen handles everything. Our customer engagement has tripled since we started working with them.",
-    name: "Taslima Begum",
+    name: "Abarar Hasan",
     designation: "Marketing Head, Flavours Restaurant Chain",
-    src: "https://ik.imagekit.io/atm/inbound1826760639771484176_et4kizsrB.jpg",
+    src: "https://ik.imagekit.io/atm/c8271918-dc51-40c2-8a6d-486863f08b93__1__Yamlp43fk.png?updatedAt=1779638088697",
   },
   {
     quote:
       "We needed everything — website, product catalogs, packaging design, and marketing. Lichen delivered it all under one roof with incredible quality and on-time delivery.",
-    name: "Mohammad Karim",
-    designation: "CEO, Karim Textiles",
-    src: "https://ik.imagekit.io/atm/inbound1826760639771484176_et4kizsrB.jpg",
+    name: "Tawhid Akbar",
+    designation: "CEO,Stady International Ltd.",
+    src: "https://ik.imagekit.io/atm/IMG_9200_I0Ew7lGA3.jpeg?updatedAt=1779632053465",
   },
 ];
 

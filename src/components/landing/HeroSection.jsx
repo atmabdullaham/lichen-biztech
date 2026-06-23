@@ -165,8 +165,8 @@ export default function HeroSection() {
         <Image
           src="/focus-coaching-green.png"
           alt="Focus Coaching"
-          width={120}
-          height={44}
+          width={100}
+          height={36}
           className="h-10 sm:h-11 w-auto object-contain brightness-0 opacity-80"
         />
       </div>,
@@ -322,7 +322,7 @@ export default function HeroSection() {
         </motion.div>
 
         {/* 3. Center Content */}
-        <div className="relative z-10 max-w-4xl px-6 pt-10 text-center flex flex-col items-center">
+        <div className="relative z-10 max-w-4xl px-6 pt-10 md:pt-0 text-center flex flex-col items-center">
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 25 }}
@@ -374,22 +374,36 @@ export default function HeroSection() {
 
         {/* 4. Bottom Notch & Scrolling Client Logos Background */}
         {/* Bottom Notch SVG Path */}
+        <svg width="0" height="0" className="absolute">
+          <defs>
+            <clipPath id="responsive-notch" clipPathUnits="objectBoundingBox">
+              {/* We converted your absolute 380x50 path to relative 0-to-1 coordinates */}
+              <path d="M 0 1 C 0.092 1, 0.118 0, 0.197 0 L 0.803 0 C 0.882 0, 0.908 1, 1 1 Z" />
+            </clipPath>
+          </defs>
+        </svg>
+
+        {/* 2. Background SVG - Now fully responsive with viewBox */}
         <svg
           viewBox="0 0 380 50"
-          className="w-[240px] h-[32px] sm:w-[300px] sm:h-[40px] md:w-[380px] md:h-[50px] fill-current absolute bottom-0 left-1/2 -translate-x-1/2 z-20"
+          preserveAspectRatio="none"
+          className="w-[240px] h-[36px] md:w-[300px] md:h-[40px] lg:w-[380px] lg:h-[50px] fill-current absolute bottom-0 left-1/2 -translate-x-1/2 z-20"
           style={{ color: "var(--surface-color)" }}
         >
           <path d="M 0 50 C 35 50, 45 0, 75 0 L 305 0 C 335 0, 345 50, 380 50 Z" />
         </svg>
 
-        {/* Infinite Scrolling Client Logos inside bottom notch (Clipped to flat shelf area) */}
+        {/* 3. Marquee wrapper - References the responsive SVG clipPath */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.8 }}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 w-[144px] sm:w-[180px] md:w-[228px] h-[28px] sm:h-[36px] md:h-[45px] overflow-hidden flex items-center"
+          style={{
+            clipPath: "url(#responsive-notch)",
+          }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-30 overflow-hidden w-[240px] h-[36px] md:w-[300px] md:h-[40px] lg:w-[380px] lg:h-[50px] flex items-center"
         >
-          <div className="flex items-center gap-10 md:gap-14 animate-[marquee_16s_linear_infinite] w-max whitespace-nowrap">
+          <div className="flex items-center gap-4 md:gap-6 lg:gap-8 animate-[marquee_16s_linear_infinite] w-max whitespace-nowrap">
             {/* First Set */}
             {marqueeLogos.map((logo, idx) => (
               <div

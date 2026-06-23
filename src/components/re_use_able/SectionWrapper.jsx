@@ -3,7 +3,7 @@
 export default function SectionWrapper({ children, className = "" }) {
   return (
     <section
-      className={`relative overflow-hidden py-24 sm:py-32 bg-background text-foreground transition-colors duration-300 z-10 border-t border-black/5 dark:border-white/5 select-none ${className}`}
+      className={`relative overflow-hidden py-10 md:py-16 bg-background text-foreground transition-colors duration-300 z-10 border-t border-black/5 dark:border-white/5 select-none ${className}`}
     >
       {/* Soft background grid */}
       <div className="absolute inset-0 pointer-events-none opacity-40 dark:opacity-85">
