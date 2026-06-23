@@ -1,8 +1,13 @@
 "use client";
 
-import { useState } from "react";
-import { FaLinkedinIn, FaTwitter, FaBehance, FaInstagram } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import {
+  FaBehance,
+  FaInstagram,
+  FaLinkedinIn,
+  FaTwitter,
+} from "react-icons/fa";
 import { cn } from "../../lib/utils";
 
 const DEFAULT_MEMBERS = [
@@ -10,35 +15,40 @@ const DEFAULT_MEMBERS = [
     id: "1",
     name: "Chadrack",
     role: "director of photography",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQFnmLdpZW78yA/profile-displayphoto-scale_200_200/B4DZvM8NB2JMAY-/0/1768669895649?e=2147483647&v=beta&t=5VGAB-2gYupLNaHvJHECollR25THd-3oR5wngGlQiY4",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQFnmLdpZW78yA/profile-displayphoto-scale_200_200/B4DZvM8NB2JMAY-/0/1768669895649?e=2147483647&v=beta&t=5VGAB-2gYupLNaHvJHECollR25THd-3oR5wngGlQiY4",
     social: { twitter: "#", linkedin: "#", behance: "#" },
   },
   {
     id: "2",
     name: "Mak VieSAinte",
     role: "FOUNDER",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2vnSxNNVGZV2MXRjlGELl-NgLl5kXdpDR6A&s",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2vnSxNNVGZV2MXRjlGELl-NgLl5kXdpDR6A&s",
     social: { twitter: "#", linkedin: "#" },
   },
   {
     id: "3",
     name: "Osiris Balonga",
     role: "LEAD FRONT-END",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQGVqrPPAGHtoQ/profile-displayphoto-scale_200_200/B4DZwhAkjaHwAY-/0/1770080338529?e=2147483647&v=beta&t=q-_6p1VCJ8NN8eHj9zUFwJZds_XpKez9Hy14SAIDp4M",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQGVqrPPAGHtoQ/profile-displayphoto-scale_200_200/B4DZwhAkjaHwAY-/0/1770080338529?e=2147483647&v=beta&t=q-_6p1VCJ8NN8eHj9zUFwJZds_XpKez9Hy14SAIDp4M",
     social: { twitter: "#", linkedin: "#" },
   },
   {
     id: "4",
     name: "Jacques",
     role: "PRODUCT OWNER",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQE-Z7-S1LSYNQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1724143166545?e=2147483647&v=beta&t=6IPCwgOzblGt4p2fEdnY74gMbLyRHii5Ite3A39qQsY",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQE-Z7-S1LSYNQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1724143166545?e=2147483647&v=beta&t=6IPCwgOzblGt4p2fEdnY74gMbLyRHii5Ite3A39qQsY",
     social: { linkedin: "#" },
   },
   {
     id: "5",
     name: "Riche Makso",
     role: "CTO - PRODUCT DESIGNER",
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQEkTAbZLlSrLg/profile-displayphoto-scale_200_200/B4DZoHdu8BGgAY-/0/1761061833315?e=2147483647&v=beta&t=Rg1dBTvq9X2heyhuhBwG2DsEkG65v0vQ35hF2FSeYns",
+    image:
+      "https://media.licdn.com/dms/image/v2/D4D03AQEkTAbZLlSrLg/profile-displayphoto-scale_200_200/B4DZoHdu8BGgAY-/0/1761061833315?e=2147483647&v=beta&t=Rg1dBTvq9X2heyhuhBwG2DsEkG65v0vQ35hF2FSeYns",
     social: { twitter: "#", linkedin: "#" },
   },
   {
@@ -58,7 +68,10 @@ export default function TeamActivitySection({ members = DEFAULT_MEMBERS }) {
   const col3 = members.filter((_, i) => i % 3 === 2);
 
   return (
-    <section id="team" className="relative py-24 sm:py-32 overflow-hidden bg-white dark:bg-background transition-colors duration-300 select-none">
+    <section
+      id="team"
+      className="relative py-10 md:py-16 overflow-hidden bg-white dark:bg-background transition-colors duration-300 select-none"
+    >
       {/* Background accents (using theme glow) */}
       <div
         className="absolute bottom-0 right-0 h-96 w-96 translate-x-1/2 translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none"
@@ -85,20 +98,21 @@ export default function TeamActivitySection({ members = DEFAULT_MEMBERS }) {
             Creative Minds Behind Lichen
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Meet the talented individuals driving innovation and excellence across all our 360° business solutions.
+            Meet the talented individuals driving innovation and excellence
+            across all our 360° business solutions.
           </p>
         </motion.div>
 
-        <div className="flex flex-col md:flex-row items-center md:items-start gap-10 lg:gap-16 select-none w-full max-w-5xl mx-auto py-4 px-4 md:px-6 font-sans justify-center">
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16 select-none w-full max-w-5xl mx-auto py-4 md:px-6 font-sans justify-center">
           {/* ── Left: photo grid ── */}
-          <div className="flex gap-3 md:gap-4 flex-shrink-0 overflow-x-auto pb-4 md:pb-0 justify-center w-full md:w-auto">
+          <div className="flex gap-1 md:gap-4 shrink-0 overflow-x-auto pb-4 md:pb-0 justify-center w-full md:w-auto">
             {/* Column 1 */}
-            <div className="flex flex-col gap-3 md:gap-4">
+            <div className="flex flex-col gap-1 md:gap-4">
               {col1.map((member) => (
                 <PhotoCard
                   key={member.id}
                   member={member}
-                  className="w-[110px] h-[120px] sm:w-[130px] sm:h-[140px] md:w-[155px] md:h-[165px]"
+                  className="w-20 h-25 lg:w-[130px] md:h-[140px] md:w-[155px] md:h-[165px]"
                   hoveredId={hoveredId}
                   onHover={setHoveredId}
                 />
@@ -153,12 +167,7 @@ export default function TeamActivitySection({ members = DEFAULT_MEMBERS }) {
    Photo card 
 ───────────────────────────────────────── */
 
-function PhotoCard({
-  member,
-  className,
-  hoveredId,
-  onHover,
-}) {
+function PhotoCard({ member, className, hoveredId, onHover }) {
   const isActive = hoveredId === member.id;
   const isDimmed = hoveredId !== null && !isActive;
 
@@ -167,8 +176,11 @@ function PhotoCard({
       className={cn(
         "overflow-hidden rounded-2xl cursor-pointer flex-shrink-0 transition-all duration-500 shadow-md border border-transparent",
         className,
-        isDimmed ? "opacity-40 scale-95 grayscale" : "opacity-100 scale-100 grayscale-0 border-neutral-200/50 dark:border-white/5 shadow-[#85C441]/5",
-        isActive && "border-[#85C441] shadow-lg shadow-[#85C441]/10 scale-[1.03]"
+        isDimmed
+          ? "opacity-40 scale-95 grayscale"
+          : "opacity-100 scale-100 grayscale-0 border-neutral-200/50 dark:border-white/5 shadow-[#85C441]/5",
+        isActive &&
+          "border-[#85C441] shadow-lg shadow-[#85C441]/10 scale-[1.03]",
       )}
       onMouseEnter={() => onHover(member.id)}
       onMouseLeave={() => onHover(null)}
@@ -178,7 +190,9 @@ function PhotoCard({
         alt={member.name}
         className="w-full h-full object-cover transition-all duration-500"
         style={{
-          filter: isActive ? "grayscale(0) brightness(1.05)" : "grayscale(1) brightness(0.8)",
+          filter: isActive
+            ? "grayscale(0) brightness(1.05)"
+            : "grayscale(1) brightness(0.8)",
         }}
       />
     </div>
@@ -189,20 +203,20 @@ function PhotoCard({
    Member name section
 ───────────────────────────────────────── */
 
-function MemberRow({
-  member,
-  hoveredId,
-  onHover,
-}) {
+function MemberRow({ member, hoveredId, onHover }) {
   const isActive = hoveredId === member.id;
   const isDimmed = hoveredId !== null && !isActive;
-  const hasSocial = member.social?.twitter ?? member.social?.linkedin ?? member.social?.instagram ?? member.social?.behance;
+  const hasSocial =
+    member.social?.twitter ??
+    member.social?.linkedin ??
+    member.social?.instagram ??
+    member.social?.behance;
 
   return (
     <div
       className={cn(
         "cursor-pointer transition-opacity duration-300 border-b border-neutral-100 dark:border-white/5 pb-3 md:pb-4",
-        isDimmed ? "opacity-40" : "opacity-100"
+        isDimmed ? "opacity-40" : "opacity-100",
       )}
       onMouseEnter={() => onHover(member.id)}
       onMouseLeave={() => onHover(null)}
@@ -212,13 +226,15 @@ function MemberRow({
         <span
           className={cn(
             "w-4 h-3 rounded-[5px] flex-shrink-0 transition-all duration-300",
-            isActive ? "bg-[#85C441] w-6" : "bg-[#85C441]/25 dark:bg-white/10"
+            isActive ? "bg-[#85C441] w-6" : "bg-[#85C441]/25 dark:bg-white/10",
           )}
         />
         <span
           className={cn(
             "text-base md:text-lg font-bold leading-none tracking-tight transition-colors duration-300",
-            isActive ? "text-[#1E5028] dark:text-[#85C441]" : "text-[#7A8B95] dark:text-neutral-400"
+            isActive
+              ? "text-[#1E5028] dark:text-[#85C441]"
+              : "text-[#7A8B95] dark:text-neutral-400",
           )}
         >
           {member.name}
@@ -231,7 +247,7 @@ function MemberRow({
               "flex items-center gap-2 ml-1 transition-all duration-300",
               isActive
                 ? "opacity-100 translate-x-0"
-                : "opacity-0 -translate-x-2 pointer-events-none"
+                : "opacity-0 -translate-x-2 pointer-events-none",
             )}
           >
             {member.social?.twitter && (

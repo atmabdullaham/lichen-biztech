@@ -120,8 +120,8 @@ export default function ProcessSection() {
     <section
       id="process"
       ref={containerRef}
-      className="relative overflow-hidden py-24 sm:py-32 transition-colors duration-300"
-      style={{ background: isDark ? "var(--gradient-hero)" : "#F1F8EC" }}
+      className="relative overflow-hidden py-10 md:py-16 transition-colors duration-300"
+      style={{ backgroundColor: "var(--color-brand-surface)" }}
     >
       {/* Decorative backdrop glow elements */}
       <div

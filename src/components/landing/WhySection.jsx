@@ -354,16 +354,13 @@ export default function WhySection() {
 
   return (
     <>
-      {/* ==================================================== */}
-      {/* 1. DESKTOP STICKY SCROLL TRACK (Visible on MD and above) */}
-      {/* ==================================================== */}
       <div
         ref={containerRef}
-        className="hidden md:block relative h-[300vh] bg-background text-foreground select-none overflow-visible transition-colors duration-300"
+        className="hidden md:block relative h-[300vh] bg-white dark:bg-background text-foreground select-none overflow-visible transition-colors duration-300"
       >
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           {/* Soft background grid & glows */}
-          <div className="absolute inset-0 bg-background" />
+          <div className="absolute inset-0 bg-white dark:bg-background" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#85C441]/[0.03] dark:bg-[#85C441]/[0.012] rounded-full blur-[140px] pointer-events-none" />
 
           <div className="relative max-w-7xl mx-auto px-8 md:px-12 h-full flex flex-col justify-center py-[6vh] lg:py-[8vh]">
@@ -457,7 +454,7 @@ export default function WhySection() {
       {/* ==================================================== */}
       {/* 2. MOBILE WHY CHOOSE US LAYOUT (Visible on Mobile/Tablet) */}
       {/* ==================================================== */}
-      <div className="md:hidden bg-background py-24 sm:py-32 px-6 w-full relative z-10 text-left transition-colors duration-300">
+      <div className="md:hidden bg-white dark:bg-background py-10 px-6 w-full relative z-10 text-left transition-colors duration-300">
         {/* Section Header */}
         <div className="text-left mb-20">
           <span className="mb-4 inline-block rounded-full border border-black/10 dark:border-white/10 bg-[#85C441]/10 dark:bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">

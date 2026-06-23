@@ -178,7 +178,7 @@ export default function AboutSection() {
   return (
     <SectionWrapper
       id="about"
-      className="relative overflow-hidden py-24 sm:py-32"
+      className="relative overflow-hidden py-10 md:py-16"
       style={{ backgroundColor: "var(--color-brand-surface)" }}
     >
       {/* Decorative bg element */}
