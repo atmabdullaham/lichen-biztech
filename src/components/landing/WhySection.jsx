@@ -1,428 +1,502 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  Layers3,
-  Globe2,
-  BarChart3,
-  Laptop,
-  Palette,
-  Target,
-  LineChart,
-  TrendingUp,
-  MapPin,
-} from "lucide-react";
+  AnimatePresence,
+  motion,
+  useMotionValue,
+  useTransform,
+} from "framer-motion";
+import { BarChart3, Globe, Layers } from "lucide-react";
+import { useTheme } from "next-themes";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import SectionHeader from "../re_use_able/SectionHeader";
 
-const reasons = [
+// ----------------------------------------------------
+// Data Constants
+// ----------------------------------------------------
+
+const whyChooseUsData = [
   {
-    icon: Layers3,
-    title: "360° Solution",
-    description:
-      "Everything under one roof — software, design, marketing, and strategy. No need to juggle multiple vendors. We handle it all, seamlessly.",
-    highlight: "All-in-One",
-  },
-  {
-    icon: Globe2,
+    badge: "CHITTAGONG-BASED",
+    icon: Globe,
     title: "Local Expertise",
-    description:
-      "Deep understanding of the Bangladesh market and Chittagong business landscape. We speak your language, understand your culture, and know your audience.",
-    highlight: "Chittagong-Based",
+    desc: "Deep understanding of the Bangladesh market and Chittagong business landscape. We speak your language, understand your culture, and know your audience.",
+    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80",
   },
   {
+    badge: "ALL-IN-ONE",
+    icon: Layers,
+    title: "360° Solution",
+    desc: "Everything under one roof — software, design, marketing, and strategy. No need to juggle multiple vendors. We handle it all, seamlessly.",
+    img: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    badge: "RESULTS-FOCUSED",
     icon: BarChart3,
     title: "Data-Driven",
-    description:
-      "Every strategy is backed by research and analytics. We don't guess — we measure, analyze, and optimize for maximum ROI and growth.",
-    highlight: "Results-Focused",
+    desc: "Every strategy is backed by research and analytics. We don't guess — we measure, analyze, and optimize for maximum ROI and growth.",
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
   },
 ];
 
+const testimonialsData = [
+  {
+    quote:
+      "Lichen transformed our online presence completely. Their software team built us a custom ERP that saved us 40% in operational costs. The best tech partner in Chittagong!",
+    name: "Rafiul Islam",
+    designation: "Managing Director, GreenTech Solutions Ltd.",
+    src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&h=600&q=80",
+  },
+  {
+    quote:
+      "From our brand identity redesign to ongoing social media management, Lichen handles everything. Our customer engagement has tripled since we started working with them.",
+    name: "Taslima Begum",
+    designation: "Marketing Head, Flavours Restaurant Chain",
+    src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&h=600&q=80",
+  },
+  {
+    quote:
+      "We needed everything — website, product catalogs, packaging design, and marketing. Lichen delivered it all under one roof with incredible quality and on-time delivery.",
+    name: "Mohammad Karim",
+    designation: "CEO, Karim Textiles",
+    src: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&h=600&q=80",
+  },
+];
+
+// ----------------------------------------------------
+// Sub-Components
+// ----------------------------------------------------
+
+function calculateGap(width) {
+  const minWidth = 1024;
+  const maxWidth = 1456;
+  const minGap = 60;
+  const maxGap = 86;
+  if (width <= minWidth) return minGap;
+  if (width >= maxWidth)
+    return Math.max(minGap, maxGap + 0.06018 * (width - maxWidth));
+  return (
+    minGap + (maxGap - minGap) * ((width - minWidth) / (maxWidth - minWidth))
+  );
+}
+
+function CircularTestimonials({ testimonials, isDark }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoverPrev, setHoverPrev] = useState(false);
+  const [hoverNext, setHoverNext] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(1200);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const imageContainerRef = useRef(null);
+
+  const testimonialsLength = useMemo(() => testimonials.length, [testimonials]);
+  const activeTestimonial = useMemo(
+    () => testimonials[activeIndex],
+    [activeIndex, testimonials],
+  );
+
+  useEffect(() => {
+    function handleResize() {
+      if (imageContainerRef.current) {
+        setContainerWidth(imageContainerRef.current.offsetWidth);
+      }
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % testimonialsLength);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [activeIndex, isHovered, testimonialsLength]);
+
+  const handleNext = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % testimonialsLength);
+  }, [testimonialsLength]);
+
+  const handlePrev = useCallback(() => {
+    setActiveIndex(
+      (prev) => (prev - 1 + testimonialsLength) % testimonialsLength,
+    );
+  }, [testimonialsLength]);
+
+  function getImageStyle(index) {
+    const gap = calculateGap(containerWidth);
+    const maxStickUp = gap * 0.8;
+    const offset =
+      (index - activeIndex + testimonialsLength) % testimonialsLength;
+    const isActive = index === activeIndex;
+    const isLeft =
+      (activeIndex - 1 + testimonialsLength) % testimonialsLength === index;
+    const isRight = (activeIndex + 1) % testimonialsLength === index;
+
+    if (isActive) {
+      return {
+        zIndex: 3,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(0px) translateY(0px) scale(1) rotateY(0deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    if (isLeft) {
+      return {
+        zIndex: 2,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(-${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(15deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    if (isRight) {
+      return {
+        zIndex: 2,
+        opacity: 1,
+        pointerEvents: "auto",
+        transform: `translateX(${gap}px) translateY(-${maxStickUp}px) scale(0.85) rotateY(-15deg)`,
+        transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+      };
+    }
+    return {
+      zIndex: 1,
+      opacity: 0,
+      pointerEvents: "none",
+      transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
+    };
+  }
+
+  const quoteVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
+  };
+
+  const colorName = isDark ? "#ffffff" : "#1E5028";
+  const colorDesignation = isDark ? "rgba(255, 255, 255, 0.6)" : "#7A8B95";
+  const colorTestimony = isDark ? "rgba(255, 255, 255, 0.85)" : "#4b5563";
+  const colorArrowBg = isDark ? "#141414" : "#f1f1f7";
+  const colorArrowFg = isDark ? "#ffffff" : "#141414";
+  const colorArrowHoverBg = "#85C441";
+
+  return (
+    <div
+      className="w-full max-w-4xl p-6 md:p-8"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+        {/* Images */}
+        <div
+          className="relative w-full h-[18rem] sm:h-[22rem] md:h-[26rem] [perspective:1000px]"
+          ref={imageContainerRef}
+        >
+          {testimonials.map((testimonial, index) => (
+            <img
+              key={testimonial.src}
+              src={testimonial.src}
+              alt={testimonial.name}
+              className="absolute w-full h-full object-cover rounded-[2rem] shadow-xl dark:shadow-black/50 border border-neutral-200/10"
+              style={getImageStyle(index)}
+            />
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col justify-between h-full min-h-[18rem] py-4">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              variants={quoteVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <h3
+                className="font-extrabold tracking-tight"
+                style={{ color: colorName, fontSize: "1.5rem" }}
+              >
+                {activeTestimonial.name}
+              </h3>
+              <p
+                className="mt-1 font-medium"
+                style={{ color: colorDesignation, fontSize: "0.925rem" }}
+              >
+                {activeTestimonial.designation}
+              </p>
+              <motion.p
+                className="mt-6 leading-relaxed italic font-medium"
+                style={{ color: colorTestimony, fontSize: "1.125rem" }}
+              >
+                {activeTestimonial.quote.split(" ").map((word, i) => (
+                  <motion.span
+                    key={i}
+                    initial={{ filter: "blur(10px)", opacity: 0, y: 5 }}
+                    animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.22,
+                      ease: "easeInOut",
+                      delay: 0.025 * i,
+                    }}
+                    style={{ display: "inline-block" }}
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                ))}
+              </motion.p>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="flex gap-4 pt-10 md:pt-0">
+            <button
+              className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-none outline-none focus:ring-2 focus:ring-[#85C441]"
+              onClick={handlePrev}
+              style={{
+                backgroundColor: hoverPrev ? colorArrowHoverBg : colorArrowBg,
+              }}
+              onMouseEnter={() => setHoverPrev(true)}
+              onMouseLeave={() => setHoverPrev(false)}
+              aria-label="Previous testimonial"
+            >
+              <FaArrowLeft
+                size={20}
+                color={hoverPrev ? "#000000" : colorArrowFg}
+              />
+            </button>
+            <button
+              className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-colors duration-300 border-none outline-none focus:ring-2 focus:ring-[#85C441]"
+              onClick={handleNext}
+              style={{
+                backgroundColor: hoverNext ? colorArrowHoverBg : colorArrowBg,
+              }}
+              onMouseEnter={() => setHoverNext(true)}
+              onMouseLeave={() => setHoverNext(false)}
+              aria-label="Next testimonial"
+            >
+              <FaArrowRight
+                size={20}
+                color={hoverNext ? "#000000" : colorArrowFg}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ----------------------------------------------------
+// Main Component
+// ----------------------------------------------------
+
 export default function WhySection() {
+  const containerRef = useRef(null);
   const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState(0);
+
+  // Track scroll position of the sticky container manually for 100% reliability
+  const scrollProgress = useMotionValue(0);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerHeight = rect.height;
+      const viewportHeight = window.innerHeight;
+
+      // The parent container has a scroll height track, but we only calculate progress
+      // over the vertical area where the sticky container is pinned.
+      // Since Testimonials is rendered below, the scroll track is h-[300vh].
+      // The sticky block container takes h-screen (100vh).
+      // Thus, the scroll range of the sticky block is exactly (300vh - 100vh = 200vh).
+      const scrollRange = containerHeight - viewportHeight;
+
+      if (scrollRange <= 0) return;
+
+      const progress = -rect.top / scrollRange;
+      const clampedProgress = Math.max(0, Math.min(1, progress));
+      scrollProgress.set(clampedProgress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollProgress]);
+
+  // Framer Motion transforms for the middle column animation on desktop (bottom drawer system)
+  const middleOpacity = useTransform(
+    scrollProgress,
+    [0.0, 0.05, 0.7, 1.0],
+    [0, 0, 1, 1],
+  );
+  const middleY = useTransform(
+    scrollProgress,
+    [0.0, 0.05, 0.7, 1.0],
+    [380, 380, 0, 0],
+  );
+  const middleScale = useTransform(
+    scrollProgress,
+    [0.0, 0.05, 0.7, 1.0],
+    [0.96, 0.96, 1, 1],
+  );
 
   const currentTheme = theme === "system" ? resolvedTheme : theme;
   const isDark = !mounted || currentTheme === "dark";
 
-  // Framer Motion Animation Variants for orbiting network
-  const orbitVariants = {
-    animate: {
-      rotate: 360,
-      transition: {
-        repeat: Infinity,
-        duration: 25,
-        ease: "linear",
-      },
-    },
-  };
-
-  const counterOrbitVariants = {
-    animate: {
-      rotate: -360,
-      transition: {
-        repeat: Infinity,
-        duration: 25,
-        ease: "linear",
-      },
-    },
-  };
-
-  // Dynamically set background styling for coordinate grids
-  const gridStyle = {
-    backgroundImage: isDark
-      ? "radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px)"
-      : "radial-gradient(rgba(30, 80, 40, 0.07) 1px, transparent 1px)",
-    backgroundSize: "24px 24px",
-  };
-
   return (
-    <section
-      id="why"
-      className="relative overflow-hidden py-24 sm:py-32 transition-colors duration-300 bg-white dark:bg-neutral-950"
-    >
-      {/* Decorative radial glows */}
+    <>
       <div
-        className="absolute top-0 right-0 h-96 w-96 translate-x-1/2 -translate-y-1/2 rounded-full opacity-15 blur-3xl pointer-events-none select-none"
-        style={{ background: "rgba(133, 196, 65, 0.2)" }}
-      />
-      <div
-        className="absolute bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/2 translate-y-1/2 rounded-full opacity-10 blur-3xl pointer-events-none select-none"
-        style={{ background: "rgba(30, 80, 40, 0.3)" }}
-      />
+        ref={containerRef}
+        className="hidden md:block relative h-[300vh] bg-white dark:bg-background text-foreground select-none overflow-visible transition-colors duration-300"
+      >
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          {/* Soft background grid & glows */}
+          <div className="absolute inset-0 bg-white dark:bg-background" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#85C441]/[0.03] dark:bg-[#85C441]/[0.012] rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-20 text-center"
-        >
-          <span className="mb-4 inline-block rounded-full border border-black/10 dark:border-white/10 bg-[#85C441]/10 dark:bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">
-            Why Choose Us
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-[#1E5028] dark:text-white sm:text-4xl lg:text-5xl">
-            Why Lichen?
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-neutral-600 dark:text-white/60">
-            We merge technology and creative execution to deliver a comprehensive 360° growth strategy for your business.
-          </p>
-        </motion.div>
+          <div className="relative max-w-7xl mx-auto px-8 md:px-12 h-full flex flex-col justify-center py-[6vh] lg:py-[8vh]">
+            {/* Section Header */}
+            <SectionHeader
+              badge="Why Choose Us"
+              title="A Growth Partner, Not Just a Vendor"
+              description="We combine end-to-end expertise with local insights and data-backed strategies to help your business excel in today's digital landscape."
+            />
 
-        {/* Redesigned Grid: Left sticky visual showcase, right active text cards */}
-        <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
-          {/* Sticky Visual Showcase Container */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28 flex items-center justify-center select-none">
-            <div 
-              style={gridStyle}
-              className="relative overflow-hidden w-full max-w-[420px] aspect-square rounded-3xl border border-black/5 dark:border-white/5 bg-[#F1F8EC]/50 dark:bg-black/20 backdrop-blur-md shadow-xl flex items-center justify-center p-6 transition-all duration-300"
-            >
-              {/* Inner card glow border */}
-              <div className="absolute inset-0 rounded-3xl border border-white/10 dark:border-white/5 pointer-events-none" />
-
-              <AnimatePresence mode="wait">
-                {activeTab === 0 && (
-                  <motion.div
-                    key="tab-0"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35 }}
-                    className="relative w-full h-full flex items-center justify-center"
-                  >
-                    {/* Orbit track circle */}
-                    <div className="absolute w-[220px] h-[220px] rounded-full border border-dashed border-[#85C441]/25 flex items-center justify-center" />
-
-                    {/* Orbiting children network */}
-                    <motion.div
-                      variants={orbitVariants}
-                      animate="animate"
-                      className="absolute w-[220px] h-[220px] flex items-center justify-center"
-                    >
-                      {/* Node 1: Software */}
-                      <motion.div
-                        variants={counterOrbitVariants}
-                        animate="animate"
-                        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5"
-                      >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/5 dark:border-white/10 bg-white dark:bg-[#0E2A14] shadow-md">
-                          <Laptop className="h-5 w-5 text-[#85C441]" />
-                        </div>
-                        <span className="text-[10px] font-extrabold tracking-wider text-neutral-500 dark:text-white/50 uppercase">CODE</span>
-                      </motion.div>
-
-                      {/* Node 2: Design */}
-                      <motion.div
-                        variants={counterOrbitVariants}
-                        animate="animate"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 flex flex-col items-center gap-1.5"
-                      >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/5 dark:border-white/10 bg-white dark:bg-[#0E2A14] shadow-md">
-                          <Palette className="h-5 w-5 text-[#85C441]" />
-                        </div>
-                        <span className="text-[10px] font-extrabold tracking-wider text-neutral-500 dark:text-white/50 uppercase">CREATIVE</span>
-                      </motion.div>
-
-                      {/* Node 3: Marketing */}
-                      <motion.div
-                        variants={counterOrbitVariants}
-                        animate="animate"
-                        className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5"
-                      >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/5 dark:border-white/10 bg-white dark:bg-[#0E2A14] shadow-md">
-                          <Target className="h-5 w-5 text-[#85C441]" />
-                        </div>
-                        <span className="text-[10px] font-extrabold tracking-wider text-neutral-500 dark:text-white/50 uppercase">MARKETING</span>
-                      </motion.div>
-
-                      {/* Node 4: Strategy */}
-                      <motion.div
-                        variants={counterOrbitVariants}
-                        animate="animate"
-                        className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-1.5"
-                      >
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full border border-black/5 dark:border-white/10 bg-white dark:bg-[#0E2A14] shadow-md">
-                          <LineChart className="h-5 w-5 text-[#85C441]" />
-                        </div>
-                        <span className="text-[10px] font-extrabold tracking-wider text-neutral-500 dark:text-white/50 uppercase">GROWTH</span>
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Central Node */}
-                    <div className="relative flex h-20 w-20 items-center justify-center rounded-full border border-[#85C441]/35 bg-white dark:bg-[#0A1F10] shadow-[0_0_20px_rgba(133,196,65,0.15)] z-10">
-                      <div className="absolute inset-1.5 rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] opacity-90 shadow-inner" />
-                      <span className="relative text-xs font-black tracking-widest text-white uppercase text-center leading-none">360°<br/>BTS</span>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 1 && (
-                  <motion.div
-                    key="tab-1"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35 }}
-                    className="relative w-full h-full flex items-center justify-center"
-                  >
-                    {/* SVG coordinate rings */}
-                    <svg className="absolute w-[240px] h-[240px] opacity-35" viewBox="0 0 300 300">
-                      <circle cx="150" cy="150" r="40" stroke="#85C441" strokeWidth="1.5" />
-                      <circle cx="150" cy="150" r="80" stroke="#85C441" strokeWidth="1.5" strokeDasharray="6 6" />
-                      <circle cx="150" cy="150" r="120" stroke="#85C441" strokeWidth="1.5" />
-                    </svg>
-
-                    {/* Scanning radar conic sweep overlay */}
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
-                      className="absolute w-[240px] h-[240px] rounded-full border-r border-[#85C441]/25 pointer-events-none"
-                      style={{
-                        transformOrigin: "center center",
-                        background: "conic-gradient(from 0deg, rgba(133, 196, 65, 0.12) 0deg, transparent 120deg)",
-                        left: "calc(50% - 120px)",
-                        top: "calc(50% - 120px)"
-                      }}
-                    />
-
-                    {/* Central location hotspot (Chittagong) */}
-                    <div className="absolute flex flex-col items-center z-10">
-                      <div className="relative flex h-12 w-12 items-center justify-center">
-                        {/* Pulser beacon wave */}
-                        <div className="absolute inset-0 rounded-full bg-[#85C441]/25 animate-ping" />
-                        <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#85C441] to-[#3A6E2A] border-2 border-white dark:border-[#0A1F10] shadow-lg">
-                          <MapPin className="h-4.5 w-4.5 text-white" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Corner coordinates HUD details */}
-                    <div className="absolute top-4 left-4 flex flex-col gap-0.5 text-left select-none pointer-events-none font-mono">
-                      <span className="text-[10px] font-bold text-[#85C441] uppercase tracking-widest">LOCAL PRESTIGE</span>
-                      <span className="text-[9px] text-neutral-400 dark:text-white/40">LAT: 22.3569° N</span>
-                      <span className="text-[9px] text-neutral-400 dark:text-white/40">LON: 91.7832° E</span>
-                    </div>
-
-                    <div className="absolute bottom-4 right-4 bg-[#85C441]/10 dark:bg-white/5 px-2 py-1 rounded border border-black/5 dark:border-white/10 font-mono">
-                      <span className="text-[9px] font-bold text-[#4A7A30] dark:text-[#85C441] tracking-wider uppercase">HQ: CHITTAGONG</span>
-                    </div>
-                  </motion.div>
-                )}
-
-                {activeTab === 2 && (
-                  <motion.div
-                    key="tab-2"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.35 }}
-                    className="relative w-full h-full flex flex-col justify-center px-4"
-                  >
-                    {/* SVG Trend Graph */}
-                    <div className="relative w-full h-[180px] mt-6 flex items-center justify-center">
-                      <svg className="w-full h-full" viewBox="0 0 400 200" fill="none">
-                        <defs>
-                          <linearGradient id="graph-fill" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="#85C441" stopOpacity="0.25" />
-                            <stop offset="100%" stopColor="#85C441" stopOpacity="0" />
-                          </linearGradient>
-                        </defs>
-
-                        {/* Grid Lines */}
-                        <line x1="50" y1="30" x2="350" y2="30" stroke={isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(30, 80, 40, 0.05)"} strokeDasharray="3 3" />
-                        <line x1="50" y1="80" x2="350" y2="80" stroke={isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(30, 80, 40, 0.05)"} strokeDasharray="3 3" />
-                        <line x1="50" y1="130" x2="350" y2="130" stroke={isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(30, 80, 40, 0.05)"} strokeDasharray="3 3" />
-                        <line x1="50" y1="170" x2="350" y2="170" stroke={isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(30, 80, 40, 0.1)"} />
-
-                        {/* Area Shading under Graph */}
-                        <motion.path
-                          d="M 50 170 Q 120 140, 180 100 T 320 40 L 320 170 L 50 170 Z"
-                          fill="url(#graph-fill)"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.4, duration: 0.6 }}
-                        />
-
-                        {/* Rising Growth Line */}
-                        <motion.path
-                          d="M 50 170 Q 120 140, 180 100 T 320 40"
-                          stroke="#85C441"
-                          strokeWidth="3.5"
-                          strokeLinecap="round"
-                          initial={{ pathLength: 0 }}
-                          animate={{ pathLength: 1 }}
-                          transition={{ duration: 1.2, ease: "easeOut" }}
-                        />
-
-                        {/* Target cursor pin at final node */}
-                        <motion.circle
-                          cx="320"
-                          cy="40"
-                          r="5"
-                          fill="#85C441"
-                          stroke="white"
-                          strokeWidth="1.5"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ delay: 1, duration: 0.3 }}
-                        />
-                      </svg>
-
-                      {/* Tooltip Badge */}
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.85, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        transition={{ delay: 0.8, duration: 0.3 }}
-                        className="absolute right-10 top-2 bg-[#1E5028] dark:bg-[#0A1F10] text-white text-[10px] font-extrabold py-1 px-2.5 rounded-lg border border-[#85C441]/35 shadow-md flex items-center gap-1 font-mono"
-                      >
-                        <TrendingUp className="w-3.5 h-3.5 text-[#85C441]" />
-                        <span>+240% ROI</span>
-                      </motion.div>
-                    </div>
-
-                    {/* Dashboard mini bar graph inputs */}
-                    <div className="absolute bottom-4 left-6 flex gap-2 items-end">
-                      {[1, 2, 3, 4].map((bar, i) => (
-                        <motion.div
-                          key={i}
-                          animate={{ height: i === 0 ? [15, 30, 10, 15] : i === 1 ? [30, 12, 45, 30] : i === 2 ? [10, 25, 8, 10] : [25, 40, 15, 25] }}
-                          transition={{ repeat: Infinity, duration: 2.5 + i * 0.4, ease: "easeInOut" }}
-                          className="w-2.5 rounded-t bg-[#85C441]/25 border border-[#85C441]/10"
-                        />
-                      ))}
-                      <span className="text-[8px] font-bold text-neutral-400 dark:text-white/30 ml-1 tracking-widest uppercase font-mono">LIVE OPTIMIZATION</span>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-
-          {/* Interactive Reasons Info Stack */}
-          <div className="lg:col-span-7 space-y-6">
-            {reasons.map((reason, index) => {
-              const isActive = activeTab === index;
-              return (
-                <div
-                  key={reason.title}
-                  onMouseEnter={() => setActiveTab(index)}
-                  onClick={() => setActiveTab(index)}
-                  className={`group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 cursor-pointer ${
-                    isActive
-                      ? "border-[#85C441]/40 bg-[#F1F8EC]/60 dark:bg-[#0A1F10]/20 shadow-md shadow-[#85C441]/5"
-                      : "border-black/5 dark:border-white/5 bg-white/50 dark:bg-black/10 hover:border-black/10 dark:hover:border-white/10"
-                  }`}
-                >
-                  {/* Subtle radial gradient on active/hover */}
-                  <div
-                    className={`absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none ${
-                      isActive ? "opacity-100" : ""
-                    }`}
-                    style={{
-                      background:
-                        "radial-gradient(circle at top right, rgba(133,196,65,0.06) 0%, transparent 60%)",
-                    }}
-                  />
-
-                  <div className="relative flex gap-5 items-start">
-                    {/* Left: Tab Icon */}
-                    <div
-                      className={`flex-shrink-0 flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 ${
-                        isActive
-                          ? "bg-gradient-to-br from-[#85C441] to-[#3A6E2A] text-white scale-110 shadow-md"
-                          : "bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441]"
-                      }`}
-                    >
-                      <reason.icon className="h-6 w-6 text-current" />
-                    </div>
-
-                    {/* Right: Info */}
-                    <div className="flex-1 text-left">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <h3
-                          className={`text-lg font-bold transition-colors duration-200 ${
-                            isActive
-                              ? "text-[#1E5028] dark:text-white"
-                              : "text-neutral-800 dark:text-white/80 group-hover:text-neutral-900 dark:group-hover:text-white"
-                          }`}
-                        >
-                          {reason.title}
-                        </h3>
-                        <span
-                          className={`rounded-full px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
-                            isActive
-                              ? "bg-gradient-to-r from-[#85C441]/20 to-[#3A6E2A]/20 text-[#3A6E2A] dark:text-[#85C441] border border-[#85C441]/30"
-                              : "bg-[#85C441]/5 text-neutral-500 dark:text-white/40 border border-transparent"
-                          }`}
-                        >
-                          {reason.highlight}
-                        </span>
-                      </div>
-                      <p
-                        className={`text-sm leading-relaxed transition-colors duration-200 ${
-                          isActive
-                            ? "text-neutral-700 dark:text-white/70"
-                            : "text-neutral-500 dark:text-white/45"
-                        }`}
-                      >
-                        {reason.description}
-                      </p>
-                    </div>
+            {/* Cards Grid */}
+            <div className="grid grid-cols-3 gap-6 md:gap-8 items-stretch">
+              {/* Column 1: 360° Solution */}
+              <div className="bg-white dark:bg-[#060f08] border border-[#1E5028]/10 dark:border-[#85C441]/10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_2px_8px_rgba(255,255,255,0.03)] rounded-3xl p-6 md:p-8 flex flex-col justify-start hover:border-[#4A7A30]/30 dark:hover:border-[#85C441]/25 hover:shadow-[0_15px_30px_rgba(30,80,40,0.05),_inset_0_2px_8px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_0_30px_-5px_rgba(133,196,65,0.05),_inset_0_2px_8px_rgba(255,255,255,0.03)] transition-all duration-500">
+                <div className="flex items-center justify-between">
+                  <span className="bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] border border-[#85C441]/20 text-[9px] font-extrabold tracking-widest px-2.5 py-1 rounded-full uppercase font-sans">
+                    {whyChooseUsData[0].badge}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] flex items-center justify-center border border-[#85C441]/20">
+                    {(() => {
+                      const Icon = whyChooseUsData[0].icon;
+                      return <Icon className="w-5 h-5 shadow-xl" />;
+                    })()}
                   </div>
                 </div>
-              );
-            })}
+                <h3 className="text-2xl font-bold text-[#1E5028] dark:text-white mt-6 tracking-tight font-sans">
+                  {whyChooseUsData[0].title}
+                </h3>
+                <p className="text-xs md:text-[13px] text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed font-sans">
+                  {whyChooseUsData[0].desc}
+                </p>
+              </div>
+
+              {/* Column 2: Local Expertise (Animated Bottom Drawer System) */}
+              <div className="relative">
+                <motion.div
+                  style={{
+                    opacity: middleOpacity,
+                    y: middleY,
+                    scale: middleScale,
+                  }}
+                  className="w-full h-full"
+                >
+                  <div className="bg-white dark:bg-[#060f08] border border-[#1E5028]/10 dark:border-[#85C441]/10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_2px_8px_rgba(255,255,255,0.03)] rounded-3xl p-6 md:p-8 flex flex-col justify-start h-full hover:border-[#4A7A30]/30 dark:hover:border-[#85C441]/25 hover:shadow-[0_15px_30px_rgba(30,80,40,0.05),_inset_0_2px_8px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_0_30px_-5px_rgba(133,196,65,0.05),_inset_0_2px_8px_rgba(255,255,255,0.03)] transition-all duration-500">
+                    <div className="flex items-center justify-between">
+                      <span className="bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] border border-[#85C441]/20 text-[9px] font-extrabold tracking-widest px-2.5 py-1 rounded-full uppercase font-sans">
+                        {whyChooseUsData[1].badge}
+                      </span>
+                      <div className="w-10 h-10 rounded-xl bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] flex items-center justify-center border border-[#85C441]/20">
+                        {(() => {
+                          const IconComp = whyChooseUsData[1].icon;
+                          return <IconComp className="w-5 h-5" />;
+                        })()}
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#1E5028] dark:text-white mt-6 tracking-tight font-sans">
+                      {whyChooseUsData[1].title}
+                    </h3>
+                    <p className="text-xs md:text-[13px] text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed font-sans">
+                      {whyChooseUsData[1].desc}
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Column 3: Data-Driven */}
+              <div className="bg-white dark:bg-[#060f08] border border-[#1E5028]/10 dark:border-[#85C441]/10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_2px_8px_rgba(255,255,255,0.03)] rounded-3xl p-6 md:p-8 flex flex-col justify-start hover:border-[#4A7A30]/30 dark:hover:border-[#85C441]/25 hover:shadow-[0_15px_30px_rgba(30,80,40,0.05),_inset_0_2px_8px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_0_30px_-5px_rgba(133,196,65,0.05),_inset_0_2px_8px_rgba(255,255,255,0.03)] transition-all duration-500">
+                <div className="flex items-center justify-between">
+                  <span className="bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] border border-[#85C441]/20 text-[9px] font-extrabold tracking-widest px-2.5 py-1 rounded-full uppercase font-sans">
+                    {whyChooseUsData[2].badge}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] flex items-center justify-center border border-[#85C441]/20">
+                    {(() => {
+                      const Icon = whyChooseUsData[2].icon;
+                      return <Icon className="w-5 h-5" />;
+                    })()}
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-[#1E5028] dark:text-white mt-6 tracking-tight font-sans">
+                  {whyChooseUsData[2].title}
+                </h3>
+                <p className="text-xs md:text-[13px] text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed font-sans">
+                  {whyChooseUsData[2].desc}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+
+      {/* ==================================================== */}
+      {/* 2. MOBILE WHY CHOOSE US LAYOUT (Visible on Mobile/Tablet) */}
+      {/* ==================================================== */}
+      <div className="md:hidden bg-white dark:bg-background py-10 px-6 w-full relative z-10 text-left transition-colors duration-300">
+        {/* Section Header */}
+        <div className="text-left mb-20">
+          <span className="mb-4 inline-block rounded-full border border-black/10 dark:border-white/10 bg-[#85C441]/10 dark:bg-white/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">
+            Why Choose Us
+          </span>
+          <h2 className="text-3xl font-bold text-[#1E5028] dark:text-white tracking-tight">
+            A Growth Partner, Not Just a Vendor
+          </h2>
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed">
+            We combine end-to-end expertise with local insights and data-backed
+            strategies to help your business excel in today's digital landscape.
+          </p>
+        </div>
+
+        {/* Vertical Stack Cards */}
+        <div className="space-y-8">
+          {whyChooseUsData.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={item.badge}
+                className="bg-white dark:bg-[#060f08] border border-[#1E5028]/10 dark:border-[#85C441]/10 shadow-[inset_0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[inset_0_2px_8px_rgba(255,255,255,0.03)] rounded-3xl p-6 flex flex-col justify-start"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] border border-[#85C441]/20 text-[9px] font-extrabold tracking-widest px-2.5 py-1 rounded-full uppercase font-sans">
+                    {item.badge}
+                  </span>
+                  <div className="w-10 h-10 rounded-xl bg-[#85C441]/10 text-[#4A7A30] dark:text-[#85C441] flex items-center justify-center border border-[#85C441]/20">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-[#1E5028] dark:text-white mt-6 tracking-tight font-sans">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-3 leading-relaxed font-sans">
+                  {item.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 }

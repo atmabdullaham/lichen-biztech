@@ -1,53 +1,61 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { Leaf, Target, Users, Briefcase, Award, Sparkles } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Award, Briefcase, Leaf, Sparkles, Target, Users } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
+import SectionHeader from "../re_use_able/SectionHeader";
+import SectionWrapper from "../re_use_able/SectionWrapper";
 
 const storyCards = [
   {
     icon: Users,
     title: "150+ Clients Served",
     subtitle: "Global Trust",
-    description: "Partnering with businesses globally to build custom digital solutions that scale.",
+    description:
+      "Partnering with businesses globally to build custom digital solutions that scale.",
     statBadge: "150+ Clients Served",
   },
   {
     icon: Leaf,
     title: "Symbiotic Growth",
     subtitle: "Our Philosophy",
-    description: "Growing alongside your business like a symbiotic natural lichen organism.",
+    description:
+      "Growing alongside your business like a symbiotic natural lichen organism.",
     statBadge: "Symbiotic Partnership",
   },
   {
     icon: Briefcase,
     title: "500+ Projects Completed",
     subtitle: "Proven Delivery",
-    description: "Successful software, design, and marketing projects completed on-time.",
+    description:
+      "Successful software, design, and marketing projects completed on-time.",
     statBadge: "500+ Projects",
   },
   {
     icon: Target,
     title: "Tailored Focus",
     subtitle: "Bespoke Strategy",
-    description: "Rejecting cookie-cutter templates for solutions tailored to your goals.",
+    description:
+      "Rejecting cookie-cutter templates for solutions tailored to your goals.",
     statBadge: "Focused Solutions",
   },
   {
     icon: Award,
     title: "5+ Years Experience",
     subtitle: "Proven Track Record",
-    description: "Half a decade of industry expertise delivering business success.",
+    description:
+      "Half a decade of industry expertise delivering business success.",
     statBadge: "5+ Years Track Record",
   },
   {
     icon: Sparkles,
     title: "Your Extended Team",
     subtitle: "Continuous Support",
-    description: "Continuous collaboration and expertise whenever your business needs it.",
+    description:
+      "Continuous collaboration and expertise whenever your business needs it.",
     statBadge: "Extended Team Support",
-  }
+  },
 ];
 
 function Counter({ value, duration = 2 }) {
@@ -168,9 +176,9 @@ export default function AboutSection() {
   const isDark = currentTheme === "dark";
 
   return (
-    <section
+    <SectionWrapper
       id="about"
-      className="relative overflow-hidden py-24 sm:py-32"
+      className="relative overflow-hidden py-10 md:py-16"
       style={{ backgroundColor: "var(--color-brand-surface)" }}
     >
       {/* Decorative bg element */}
@@ -185,29 +193,14 @@ export default function AboutSection() {
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-8 text-center"
-        >
-          <span className="mb-4 inline-block rounded-full border border-[#85C441]/20 bg-[#85C441]/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-[#4A7A30] dark:text-[#85C441]">
-            About Us
-          </span>
-          <h2 className="mb-4 text-3xl font-bold tracking-tight text-[#1E5028] dark:text-white sm:text-4xl lg:text-5xl">
-            What is Lichen?
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[#7A8B95] dark:text-white/60">
-            More than a company — a symbiotic partnership that grows with your
-            business. We bring technology, creativity, and strategy together.
-          </p>
-        </motion.div>
+        <SectionHeader
+          badge="About Us"
+          title="What is Lichen?"
+          description="More than a company — a symbiotic partnership that grows with your business."
+        />
 
         {/* Curved Cards Axis Slider */}
-        <div
-          className="relative w-full h-[320px] md:h-[420px] overflow-hidden select-none"
-        >
+        <div className="relative w-full h-[320px] md:h-[420px] overflow-hidden select-none">
           {/* Scrolling Cards */}
           {(() => {
             const N = storyCards.length;
@@ -217,7 +210,8 @@ export default function AboutSection() {
             let activeIndex = 0;
             let minDist = totalSpan;
             for (let k = 0; k < N; k++) {
-              const tk = (k * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
+              const tk =
+                (k * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
               const diff = Math.abs(tk - 0.5);
               const dist = diff > totalSpan / 2 ? totalSpan - diff : diff;
               if (dist < minDist) {
@@ -227,14 +221,16 @@ export default function AboutSection() {
             }
 
             return storyCards.map((card, i) => {
-              const t = (i * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
+              const t =
+                (i * S - timeProgress * totalSpan + totalSpan * 10) % totalSpan;
 
               const isVisible = t >= 0 && t <= 1;
               const clampedT = Math.max(0, Math.min(1, t));
 
               // Parabolic height formula: y = 350 - 800 * clampedT * (1 - clampedT)
               // Percentage from top is y / 400 * 100%
-              const topPct = ((350 - 800 * clampedT * (1 - clampedT)) / 400) * 100;
+              const topPct =
+                ((350 - 800 * clampedT * (1 - clampedT)) / 400) * 100;
               const leftPct = t * 100;
 
               const Icon = card.icon;
@@ -242,8 +238,13 @@ export default function AboutSection() {
 
               const baseOpacity = isVisible ? Math.sin(t * Math.PI) : 0;
               const opacity = isActive ? 1.0 : baseOpacity * 0.7;
-              const pointerEvents = isVisible && t > 0.08 && t < 0.92 ? "auto" : "none";
-              const zIndex = isVisible ? (isActive ? 20 : Math.round(baseOpacity * 10)) : 0;
+              const pointerEvents =
+                isVisible && t > 0.08 && t < 0.92 ? "auto" : "none";
+              const zIndex = isVisible
+                ? isActive
+                  ? 20
+                  : Math.round(baseOpacity * 10)
+                : 0;
 
               return (
                 <div
@@ -264,20 +265,27 @@ export default function AboutSection() {
                   <motion.div
                     animate={{
                       scale: isActive ? 1.05 : 0.92,
-                      borderColor: isActive 
-                        ? (isDark ? "#85C441" : "#4A7A30") 
-                        : (isDark ? "rgba(133, 196, 65, 0.25)" : "rgba(30, 80, 40, 0.1)"),
+                      borderColor: isActive
+                        ? isDark
+                          ? "#85C441"
+                          : "#4A7A30"
+                        : isDark
+                          ? "rgba(133, 196, 65, 0.25)"
+                          : "rgba(30, 80, 40, 0.1)",
                       boxShadow: isActive
-                        ? (isDark ? "0 8px 32px rgba(133, 196, 65, 0.25)" : "0 8px 32px rgba(30, 80, 40, 0.15)")
-                        : "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)"
+                        ? isDark
+                          ? "0 8px 32px rgba(133, 196, 65, 0.25)"
+                          : "0 8px 32px rgba(30, 80, 40, 0.15)"
+                        : "inset 0 2px 4px 0 rgba(0, 0, 0, 0.05)",
                     }}
                     whileHover={{ scale: 1.08, y: -10 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className={`
                       w-36 h-48 md:w-56 md:h-72 rounded-2xl border flex flex-col justify-between p-4 md:p-6 backdrop-blur-md cursor-pointer transition-colors duration-300
-                      ${isDark
-                        ? "bg-[#0E1F0F]/70 text-white"
-                        : "bg-white/80 text-[#1E5028]"
+                      ${
+                        isDark
+                          ? "bg-[#0E1F0F]/70 text-white"
+                          : "bg-white/80 text-[#1E5028]"
                       }
                     `}
                   >
@@ -321,7 +329,7 @@ export default function AboutSection() {
             { value: "150+", label: "Clients Served" },
             { value: "500+", label: "Projects Completed" },
             { value: "5+", label: "Years Experience" },
-            { value: "25+", label: "Team Members" }
+            { value: "25+", label: "Team Members" },
           ].map((stat, idx) => (
             <motion.div
               key={idx}
@@ -332,9 +340,10 @@ export default function AboutSection() {
               whileHover={{ y: -3 }}
               className={`
                 flex flex-col items-center justify-center py-4 px-3 md:py-5 md:px-4 rounded-2xl border text-center transition-all duration-300 backdrop-blur-md shadow-inner
-                ${isDark
-                  ? "bg-[#0E1F0F]/70 border-[#85C441]/20 hover:border-[#85C441]/40"
-                  : "bg-white/80 border-[#1E5028]/10 hover:border-[#1E5028]/25"
+                ${
+                  isDark
+                    ? "bg-[#0E1F0F]/70 border-[#85C441]/20 hover:border-[#85C441]/40"
+                    : "bg-white/80 border-[#1E5028]/10 hover:border-[#1E5028]/25"
                 }
               `}
             >
@@ -348,6 +357,6 @@ export default function AboutSection() {
           ))}
         </div>
       </div>
-    </section>
+    </SectionWrapper>
   );
 }
