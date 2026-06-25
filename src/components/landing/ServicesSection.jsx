@@ -176,11 +176,12 @@ export default function ServicesSection() {
           <motion.div
             variants={cardVariants}
             style={{
+              border: "1px solid transparent",
               background: isDark
                 ? `linear-gradient(to bottom, #0B0F0B, #040604) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`
                 : `linear-gradient(to bottom, #ffffff, #fbfdfa) padding-box, linear-gradient(135deg, #C5765D 0%, rgba(197, 118, 93, 0.15) 50%, transparent 100%) border-box`,
             }}
-            className="order-4 lg:order-none lg:col-start-3 lg:row-start-1 lg:row-span-2 h-[260px] lg:h-auto flex flex-col items-center justify-center lg:justify-start lg:pt-20 p-8 rounded-2xl shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden lg:-mt-14"
+            className=" border-2 lg:order-none lg:col-start-3 lg:row-start-1 lg:row-span-2 h-[260px] lg:h-auto flex flex-col items-center justify-center lg:justify-start lg:pt-20 p-8 rounded-2xl shadow-[0_8px_30px_rgba(197,118,93,0.01)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05),0_10px_30px_rgba(0,0,0,0.5)] relative overflow-hidden lg:-mt-14"
           >
             {/* Ambient Terracotta Radial Glow */}
             <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-[#C5765D]/10 rounded-full blur-3xl pointer-events-none" />
