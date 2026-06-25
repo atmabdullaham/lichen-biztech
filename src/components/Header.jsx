@@ -142,7 +142,7 @@ const Header = () => {
               alt="Lichen BTS"
               priority
               style={{ height: "auto" }}
-              className={`transition-all duration-300 ${!scrolled ? "" : "dark:brightness-0 dark:invert"}`}
+              className={`transition-all duration-300 ${!scrolled ? "" : ""}`}
             />
           </Link>
         </div>
